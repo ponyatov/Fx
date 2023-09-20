@@ -1,0 +1,4 @@
+git make curl
+python3 python3-ply
+code meld clang-format
+g++ gdb flex bison libreadline-dev
