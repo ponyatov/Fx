@@ -18,7 +18,7 @@ all: bin/$(MODULE)$(EXE) lib/$(MODULE).ini
 	$^
 
 # rule
-bin/$(MODULE)$(EXE): $(C) $(CP) $(H) $(HP)
+bin/$(MODULE)$(EXE): $(C) $(CP) $(H)
 	$(CXX) $(CFLAGS) -o $@ $(C) $(CP) $(L)
 tmp/$(MODULE).lexer.cpp: src/$(MODULE).lex
 	flex -o $@ $<
