@@ -1,0 +1,65 @@
+{
+  "name": "fx",
+  "version": "0.0.1",
+  "description": "FORTH-like graphical & game scripting",
+  "publisher": "dponyatov",
+  "author": {
+    "name": "Dmitry Ponyatov",
+    "email": "dponyatov@gmail.com"
+  },
+  "license": "MIT",
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Notebooks",
+    "Snippets"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ponyatov/fx/tree/dev/vscode"
+  },
+  "homepage": "https://bitbucket.org/ponyatov/fx/src/shadow/",
+  "icon": "logo.png",
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "main": "extension.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "fx.hello",
+        "title": "fx: Hello"
+      }
+    ],
+    "languages": [
+      {
+        "id": "fx",
+        "aliases": [
+          "fx", "f"
+        ],
+        "extensions": [
+          ".ini",
+          ".fx",
+          ".f"
+        ],
+        "configuration": "./fx.configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "fx",
+        "scopeName": "script.fx",
+        "path": "./fx.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "fx",
+        "path": "./snippets.json"
+      }
+    ]
+  }
+}

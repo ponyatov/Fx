@@ -11,5 +11,6 @@
 
 "nop"           CMD(nop)
 "halt"          CMD(halt)
+"repl"          CMD(repl)
 
 .               {yyerror("");}      // any undetected char

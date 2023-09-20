@@ -43,4 +43,27 @@ void nop() {}
 
 void halt() { exit(fini()); }
 
+Active::Active() : Object() {}
+
 Cmd::Cmd(void (*F)()) : Active() { fn = F; }
+
+std::map<std::string, Object *> W;
+std::vector<Object *> D;
+
+std::string Object::tag() {
+    std::string ret(abi::__cxa_demangle(typeid(*this).name(), 0, 0, nullptr));
+    for (auto &ch : ret) ch = tolower(ch);
+    return ret;
+}
+
+void Object::exec() {
+    std::cerr << "exec:\t" << this << std::endl;
+    D.push_back(this);
+}
+
+void Cmd::exec() {
+    std::cerr << "cmd:\t" << this->tag() << std::endl;
+    this->fn();
+}
+
+void repl() {}

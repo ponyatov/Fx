@@ -4,9 +4,9 @@
 
 %defines %union { Object *o; }
 
-%type <o> ex
+%type ex
 %token <o> CMD
 
 %%
-syntax : | syntax ex { std::cout << $2 << std::endl; }
-ex : CMD
+syntax : | syntax ex
+ex : CMD             { $1->exec(); }

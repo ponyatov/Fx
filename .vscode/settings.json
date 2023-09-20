@@ -10,6 +10,11 @@
                     "args": {"text": "\u000D clear ; LANG=C make all \u000D"}}]}
     ],
 
+    // files
+    "files.associations": {
+        "*.ini": "fx",
+    },
+
     // editor
     "editor.tabSize": 4,
     "editor.insertSpaces": true,

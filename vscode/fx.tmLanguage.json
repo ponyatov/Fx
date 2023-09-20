@@ -1,0 +1,64 @@
+{
+    "name": "fx",
+    "scopeName": "script.fx",
+    "fileTypes": [
+        "ini", "fx", "f"
+    ],
+    "patterns": [
+        {
+            "include": "#comment"
+        },
+        {
+            "include": "#number"
+        },
+        {
+            "include": "#def"
+        },
+        {
+            "include": "#directive"
+        }
+    ],
+    "repository": {
+        "comment": {
+            "patterns": [
+                {
+                    "comment": "pythonic/shell line comment",
+                    "match": "#.*$",
+                    "name": "comment.line"
+                },
+                {
+                    "comment": "block comment",
+                    "match": "\\(.*?\\)",
+                    "name": "comment.block"
+                }
+            ]
+        },
+        "number": {
+            "patterns": [
+                {
+                    "comment": "integer",
+                    "match": "[+\\-]?[0-9]+",
+                    "name": "constant.numeric.integer"
+                }
+            ]
+        },
+        "def": {
+            "patterns": [
+                {
+                    "comment": "colon defxtion",
+                    "match": ": +[a-zA-Z_]+",
+                    "name": "entity.name.function"
+                }
+            ]
+        },
+        "directive": {
+            "patterns": [
+                {
+                    "comment": "directive",
+                    "match": "\\.[a-z]+",
+                    "name": "entity.name.tag"
+                }
+            ]
+        }
+    }
+}
