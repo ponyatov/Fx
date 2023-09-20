@@ -1,1 +1,3 @@
 # line comment
+
+nop halt

@@ -20,10 +20,27 @@ void arg(int argc, char *argv) {  //
 
 void yyerror(std::string msg) {
     std::cerr << "\n\n"
-              << yyfile << ':' << yylineno << ' ' << msg << " [ " << yytext
+              << yyfile << ':' << yylineno << ' ' << msg << " [" << yytext
               << "]\n\n";
+    exit(-1);
 }
+
+Object::Object() {
+    ref = 0;
+    next = pool;
+    pool = this;
+}
+
+Object::~Object() { assert(ref == 0); }
+
+Object *Object::pool = nullptr;
 
 void init(int argc, char *argv[]) {}
 
 int fini(int err) { return err; }
+
+void nop() {}
+
+void halt() { exit(fini()); }
+
+Cmd::Cmd(void (*F)()) : Active() { fn = F; }
