@@ -75,7 +75,12 @@ br: $(BR)/README.md
 	cat  ../cpu/$(CPU).br  >> .config &&\
 	cat   ../hw/$(HW).br   >> .config &&\
 	cat  ../app/$(APP).br  >> .config &&\
-	echo 'BR2_DL_DIR=\"$(GZ)\"' >> .config &&\
+	echo 'BR2_DL_DIR="$(GZ)"'                        >> .config &&\
+	echo 'BR2_TARGET_GENERIC_HOSTNAME="$(APP)"'      >> .config &&\
+	echo 'BR2_TARGET_GENERIC_ISSUE="$(APP) @ $(HW)"' >> .config &&\
+	echo 'BR2_ROOTFS_OVERLAY="$(CWD)/root"'          >> .config &&\
+	echo 'BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(CWD)/all/all.kernel"' >> .config &&\
+	echo 'BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(CWD)/arch/$(ARCH).kernel $(CWD)/cpu/$(CPU).kernel $(CWD)/hw/$(HW).kernel $(CWD)/app/$(APP).kernel"' >> .config &&\
 	make menuconfig
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@

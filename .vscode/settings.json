@@ -13,6 +13,8 @@
     // files
     "files.associations": {
         "*.ini": "fx",
+        "*.br": "makefile",
+        "*.kernel": "makefile",
     },
 
     // editor

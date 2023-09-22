@@ -1,5 +1,5 @@
 .git/**
-buildroot*/**
+buildroot-*/**
 rc
 tmp/**
 bin/**
