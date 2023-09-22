@@ -2,6 +2,21 @@
 MODULE  = $(notdir $(CURDIR))
 OS     += $(shell uname -s)
 
+# version
+BR_VER = 2023.08
+
+# dirs
+CWD = $(CURDIR)
+GZ  = $(HOME)/gz
+FW  = $(CWD)/fw
+
+.PHONY: dirs
+dirs:
+	mkdir -p $(GZ) $(FW)
+
+# tool
+CURL = curl -L -o
+
 # src
 C  += src/$(MODULE).cpp
 H  += inc/$(MODULE).hpp
@@ -11,6 +26,10 @@ HP += tmp/$(MODULE).parser.hpp tmp/$(MODULE).lexer.hpp
 # cfg
 CFLAGS += -Iinc -Itmp
 CFLAGS += -Og -g2
+
+# pkg
+BR = buildroot-$(BR_VER)
+BR_GZ = $(BR).tar.gz
 
 # all
 .PHONY: all
@@ -36,3 +55,11 @@ Linux_install:
 Linux_update:
 	sudo apt update
 	sudo apt install -yu `cat apt.$(OS)`
+
+# linux
+.PHONY: br
+br: $(BR)/README.md
+$(BR)/README.md: $(GZ)/$(BR).tar.gz
+	tar zx < $< && touch $@
+$(GZ)/$(BR).tar.gz:
+	$(CURL) $@ https://github.com/buildroot/buildroot/archive/refs/tags/$(BR_VER).tar.gz

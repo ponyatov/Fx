@@ -1,0 +1,5 @@
+.git/**
+buildroot*/**
+rc
+tmp/**
+bin/**
