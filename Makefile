@@ -37,6 +37,8 @@ HP += tmp/$(MODULE).parser.hpp tmp/$(MODULE).lexer.hpp
 CFLAGS += -Iinc -Itmp
 CFLAGS += -Og -g2
 
+L += -lreadline
+
 # pkg
 BR = buildroot-$(BR_VER)
 BR_GZ = $(BR).tar.gz

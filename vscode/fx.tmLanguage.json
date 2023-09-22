@@ -16,6 +16,9 @@
         },
         {
             "include": "#directive"
+        },
+        {
+            "include": "#command"
         }
     ],
     "repository": {
@@ -45,7 +48,7 @@
         "def": {
             "patterns": [
                 {
-                    "comment": "colon defxtion",
+                    "comment": "colon definition",
                     "match": ": +[a-zA-Z_]+",
                     "name": "entity.name.function"
                 }
@@ -57,6 +60,15 @@
                     "comment": "directive",
                     "match": "\\.[a-z]+",
                     "name": "entity.name.tag"
+                }
+            ]
+        },
+        "command": {
+            "patterns": [
+                {
+                    "comment": "command",
+                    "match": "(nop|halt)",
+                    "name": "entity.name.function"
                 }
             ]
         }

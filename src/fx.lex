@@ -9,8 +9,8 @@
 #.*             {}                  // line comment
 [ \t\r\n]+      {}                  // drop spaces
 
-"nop"           CMD(nop)
-"halt"          CMD(halt)
-"repl"          CMD(repl)
+"nop"           CMD(nop ,"nop" )
+"halt"          CMD(halt,"halt")
+"repl"          CMD(repl,"repl")
 
 .               {yyerror("");}      // any undetected char

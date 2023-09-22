@@ -1,9 +1,14 @@
 #pragma once
 
 #include <assert.h>
+
 #include <cxxabi.h>
 
+#include <readline/readline.h>
+#include <readline/history.h>
+
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <map>
 
@@ -24,6 +29,9 @@ struct Object {  /// root executable object
     static Object* pool;  //< global objects pool
     Object* next;         //< next object in @ref pool
 
+    /// @name fields
+    std::string value;  //< object name, number/string value
+
     /// @name constructor
     Object();
     Object(std::string V);
@@ -31,6 +39,8 @@ struct Object {  /// root executable object
 
     /// @name dump
     virtual std::string tag();
+    virtual std::string val();
+    std::string head();
 
     /// @name interpreter/compiler
     virtual void exec();
@@ -38,11 +48,12 @@ struct Object {  /// root executable object
 
 struct Active : Object {
     Active();
+    Active(std::string V);
 };
 
 struct Cmd : Active {
     void (*fn)();
-    Cmd(void (*F)());
+    Cmd(void (*F)(), std::string V);
     void exec();
 };
 
@@ -64,10 +75,10 @@ extern int yyparse();                  //< syntax parser
         return X;                 \
     }
 
-#define CMD(F)                 \
-    {                          \
-        yylval.o = new Cmd(F); \
-        return CMD;            \
+#define CMD(F, V)                 \
+    {                             \
+        yylval.o = new Cmd(F, V); \
+        return CMD;               \
     }
 
 extern void nop();   //< `( -- )` empty command
