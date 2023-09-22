@@ -2,6 +2,15 @@
 MODULE  = $(notdir $(CURDIR))
 OS     += $(shell uname -s)
 
+# fw
+APP ?= $(MODULE)
+HW  ?= qemu686
+
+include hw/$(HW).mk
+include cpu/$(CPU).mk
+include arch/$(ARCH).mk
+include app/$(APP).mk
+
 # version
 BR_VER = 2023.08
 
@@ -59,6 +68,15 @@ Linux_update:
 # linux
 .PHONY: br
 br: $(BR)/README.md
+	cd $(BR) ;\
+	rm -f .config && make allnoconfig &&\
+	cat  ../all/all.br     >> .config &&\
+	cat ../arch/$(ARCH).br >> .config &&\
+	cat  ../cpu/$(CPU).br  >> .config &&\
+	cat   ../hw/$(HW).br   >> .config &&\
+	cat  ../app/$(APP).br  >> .config &&\
+	echo 'BR2_DL_DIR=\"$(GZ)\"' >> .config &&\
+	make menuconfig
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@
 $(GZ)/$(BR).tar.gz:
