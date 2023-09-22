@@ -1,6 +1,7 @@
 # var
 MODULE  = $(notdir $(CURDIR))
 OS     += $(shell uname -s)
+CORES  += $(shell grep processor /proc/cpuinfo | wc -l)
 
 # fw
 APP ?= $(MODULE)
@@ -81,7 +82,7 @@ br: $(BR)/README.md
 	echo 'BR2_ROOTFS_OVERLAY="$(CWD)/root"'          >> .config &&\
 	echo 'BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(CWD)/all/all.kernel"' >> .config &&\
 	echo 'BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(CWD)/arch/$(ARCH).kernel $(CWD)/cpu/$(CPU).kernel $(CWD)/hw/$(HW).kernel $(CWD)/app/$(APP).kernel"' >> .config &&\
-	make menuconfig
+	make menuconfig && make -j$(CORES)
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@
 $(GZ)/$(BR).tar.gz:
