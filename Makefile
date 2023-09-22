@@ -1,7 +1,10 @@
 # var
 MODULE  = $(notdir $(CURDIR))
-OS     += $(shell uname -s)
-CORES  += $(shell grep processor /proc/cpuinfo | wc -l)
+OS      = $(shell uname -o | tr '/' '_' )
+CORES  ?= $(shell grep processor /proc/cpuinfo | wc -l)
+
+os:
+	echo $(OS)
 
 # fw
 APP ?= $(MODULE)
@@ -56,6 +59,9 @@ tmp/$(MODULE).lexer.cpp: src/$(MODULE).lex
 tmp/$(MODULE).parser.cpp: src/$(MODULE).yacc
 	bison -o $@ $<
 
+fw/%: $(BR)/output/images/%
+	cp $< $@
+
 # install
 .PHONY: install update
 install: $(OS)_install
@@ -67,6 +73,13 @@ Linux_install:
 Linux_update:
 	sudo apt update
 	sudo apt install -yu `cat apt.$(OS)`
+
+.PHONY: Msys_install Msys_update Msys_deploy
+Msys_install:
+	pacman -Suy
+Msys_update:
+	pacman -S `cat apt.Msys | tr '\r\n' ' ' `
+#	pacman -Su
 
 # linux
 .PHONY: br
@@ -84,13 +97,14 @@ br: $(BR)/README.md
 	echo 'BR2_ROOTFS_OVERLAY="$(CWD)/root"'          >> .config &&\
 	echo 'BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(CWD)/all/all.kernel"' >> .config &&\
 	echo 'BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(CWD)/arch/$(ARCH).kernel $(CWD)/cpu/$(CPU).kernel $(CWD)/hw/$(HW).kernel $(CWD)/app/$(APP).kernel"' >> .config &&\
-	make menuconfig && make -j$(CORES)
+ 	make menuconfig && make linux-menuconfig && make -j$(CORES)
 
 .PHONY: fw
-fw: $(FW)/bzImage $(FW)/rootfs.cpio $(FW)/rootfs.iso9660
+fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660
 
-$(FW)/%: %(BR)/output/images/%
-	cp $< $@
+.PHONY: qemu
+qemu: fw/bzImage fw/rootfs.cpio
+	$(QEMU) $(QEMU_CFG) -kernel fw/bzImage -initrd fw/rootfs.cpio
 
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@
