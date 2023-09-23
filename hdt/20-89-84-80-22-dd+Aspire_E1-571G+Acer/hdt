@@ -1,0 +1,12 @@
+{
+    "hdt.product_name" : "Hardware Detection Tool",
+    "hdt.version" : "0.5.2",
+    "hdt.code_name" : "Manon",
+    "hdt.author" : "Erwan Velu",
+    "hdt.core_developer" : "Pierre-Alexandre Meyer",
+    "hdt.contributor" : "Sebastien Gonzalve (Patches)",
+    "hdt.contributor" : "Gert Hulselmans (Tests)",
+    "hdt.contributor" : "Alexander Andino (Design)",
+    "hdt.website" : "http://hdt-project.org",
+    "hdt.irc_channel" : "#hdt on freenode"
+}

@@ -1,0 +1,70 @@
+{
+    "is_vesa_valid" : true,
+    "vesa.version" : "3.0",
+    "vesa.vendor" : "Intel Corporation",
+    "vesa.product" : "Intel(R) Sandybridge/Ivybridge Graphics Controller",
+    "vesa.product_revision" : "Hardware Version 0.0",
+    "vesa.software_rev" : 256,
+    "vesa.memory" : "131008 KB",
+    "vesa.modes" : 39
+}{
+    "vesa.kernel_mode" : "0x0305",
+    "vesa.hres" : 1024,
+    "vesa.vres" : 768,
+    "vesa.bpp" : 8
+}{
+    "vesa.kernel_mode" : "0x0317",
+    "vesa.hres" : 1024,
+    "vesa.vres" : 768,
+    "vesa.bpp" : 16
+}{
+    "vesa.kernel_mode" : "0x0318",
+    "vesa.hres" : 1024,
+    "vesa.vres" : 768,
+    "vesa.bpp" : 32
+}{
+    "vesa.kernel_mode" : "0x0312",
+    "vesa.hres" : 640,
+    "vesa.vres" : 480,
+    "vesa.bpp" : 32
+}{
+    "vesa.kernel_mode" : "0x0314",
+    "vesa.hres" : 800,
+    "vesa.vres" : 600,
+    "vesa.bpp" : 16
+}{
+    "vesa.kernel_mode" : "0x0315",
+    "vesa.hres" : 800,
+    "vesa.vres" : 600,
+    "vesa.bpp" : 32
+}{
+    "vesa.kernel_mode" : "0x0301",
+    "vesa.hres" : 640,
+    "vesa.vres" : 480,
+    "vesa.bpp" : 8
+}{
+    "vesa.kernel_mode" : "0x0303",
+    "vesa.hres" : 800,
+    "vesa.vres" : 600,
+    "vesa.bpp" : 8
+}{
+    "vesa.kernel_mode" : "0x0311",
+    "vesa.hres" : 640,
+    "vesa.vres" : 480,
+    "vesa.bpp" : 16
+}{
+    "vesa.kernel_mode" : "0x037d",
+    "vesa.hres" : 1366,
+    "vesa.vres" : 768,
+    "vesa.bpp" : 8
+}{
+    "vesa.kernel_mode" : "0x037e",
+    "vesa.hres" : 1366,
+    "vesa.vres" : 768,
+    "vesa.bpp" : 16
+}{
+    "vesa.kernel_mode" : "0x037f",
+    "vesa.hres" : 1366,
+    "vesa.vres" : 768,
+    "vesa.bpp" : 32
+}

@@ -1,0 +1,7 @@
+{
+    "syslinux_fs" : "PXElinux",
+    "sv->version_string" : "PXELINUX 6.03 PXE 2014-10-06 ",
+    "sv->version" : 1539,
+    "sv->max_api" : 65535,
+    "sv->copyright_string" : "opyright (C) 1994-2014 H. Peter Anvin et al\r"
+}
