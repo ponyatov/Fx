@@ -110,7 +110,9 @@ fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
 
 .PHONY: qemu
 qemu: fw/bzImage fw/rootfs.cpio
-	$(QEMU) $(QEMU_CFG) -kernel fw/bzImage -initrd fw/rootfs.cpio
+	$(QEMU) $(QEMU_CFG) \
+		-kernel fw/bzImage -initrd fw/rootfs.cpio \
+		-append "vga=ask"
 
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@
