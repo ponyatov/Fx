@@ -16,6 +16,11 @@ LABEL node
 LABEL server
     MENU LABEL fxLinux server
 
+LABEL chain
+       MENU LABEL chain boot (Windows)
+       COM32 chain.c32
+       APPEND hd0
+
 LABEL hdt
         MENU LABEL HDT (Hardware Detection Tool)
         COM32 hdt.c32
