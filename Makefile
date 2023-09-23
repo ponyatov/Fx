@@ -15,6 +15,7 @@ include app/$(APP).mk
 # version
 BR_VER       = 2023.08
 SYSLINUX_VER = 6.03
+IDS_VER      = 2.2
 
 # dirs
 CWD = $(CURDIR)
@@ -103,7 +104,8 @@ br: $(BR)/README.md
 .PHONY: fw
 fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
 	fw/pxelinux.0 fw/ldlinux.c32 fw/libutil.c32 fw/libcom32.c32 \
-	fw/ls.c32 fw/reboot.c32 fw/poweroff.c32 fw/chain.c32 fw/hdt.c32 \
+	fw/ls.c32 fw/reboot.c32 fw/poweroff.c32 fw/chain.c32 \
+	fw/hdt.c32 fw/pci.ids \
 	fw/menu.c32 fw/vesamenu.c32 fw/libmenu.c32 fw/libgpl.c32
 
 .PHONY: qemu
@@ -167,5 +169,10 @@ fw/%: $(SYSLINUX)/bios/com32/modules/%
 	cp $< $@
 fw/%: $(SYSLINUX)/bios/com32/chain/%
 	cp $< $@
+
 fw/%: $(SYSLINUX)/bios/com32/hdt/%
 	cp $< $@
+fw/pci.ids: $(GZ)/pci-$(IDS_VER).ids.xz
+	xzcat $< > $@
+$(GZ)/pci-$(IDS_VER).ids.xz:
+	$(CURL) $@ https://pci-ids.ucw.cz/v$(IDS_VER)/pci.ids.xz
