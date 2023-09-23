@@ -1,6 +1,6 @@
 .git/**
 buildroot-*/**
+syslinux-*/**
 rc
 tmp/**
 bin/**
-syslinux/**

@@ -136,9 +136,8 @@ tftp:
 	sudo systemctl enable isc-dhcp-server
 
 .PHONY: syslinux
-syslinux: syslinux/$(SYSLINUX)/README
-syslinux/$(SYSLINUX)/README: $(GZ)/$(SYSLINUX_GZ)
-	cd syslinux ; xzcat $< | tar x
-	touch $@
+syslinux: $(SYSLINUX)/README
+$(SYSLINUX)/README: $(GZ)/$(SYSLINUX_GZ)
+	xzcat $< | tar x && touch $@
 $(GZ)/$(SYSLINUX_GZ):
 	$(CURL) $@ https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/$(SYSLINUX_GZ)

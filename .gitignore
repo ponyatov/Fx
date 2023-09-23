@@ -3,5 +3,6 @@
 *.log
 docs/
 buildroot-*/
+syslinux-*/
 /rc
 !.gitignore
