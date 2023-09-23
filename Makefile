@@ -102,7 +102,9 @@ br: $(BR)/README.md
 
 .PHONY: fw
 fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
-	fw/pxelinux.0 fw/ldlinux.c32 fw/menu.c32 fw/vesamenu.c32
+	fw/pxelinux.0 fw/ldlinux.c32 fw/libutil.c32 fw/libcom32.c32 \
+	fw/ls.c32 fw/reboot.c32 fw/poweroff.c32 fw/chain.c32 \
+	fw/menu.c32 fw/vesamenu.c32
 
 .PHONY: qemu
 qemu: fw/bzImage fw/rootfs.cpio
@@ -152,4 +154,12 @@ fw/%: $(SYSLINUX)/bios/core/%
 fw/%: $(SYSLINUX)/bios/com32/elflink/ldlinux/%
 	cp $< $@
 fw/%: $(SYSLINUX)/bios/com32/menu/%
+	cp $< $@
+fw/%: $(SYSLINUX)/bios/com32/chain/%
+	cp $< $@
+fw/%: $(SYSLINUX)/bios/com32/libutil/%
+	cp $< $@
+fw/%: $(SYSLINUX)/bios/com32/lib/%
+	cp $< $@
+fw/%: $(SYSLINUX)/bios/com32/modules/%
 	cp $< $@

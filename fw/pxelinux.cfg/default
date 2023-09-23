@@ -1,0 +1,8 @@
+UI vesamenu.c32
+
+LABEL node
+    MENU LABEL fxLinux node
+    KERNEL bzImage
+
+LABEL server
+    MENU LABEL fxLinux server
