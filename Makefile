@@ -101,7 +101,8 @@ br: $(BR)/README.md
  	make menuconfig && make linux-menuconfig && make -j$(CORES)
 
 .PHONY: fw
-fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660
+fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
+	fw/pxelinux.0 fw/ldlinux.c32 fw/menu.c32 fw/vesamenu.c32
 
 .PHONY: qemu
 qemu: fw/bzImage fw/rootfs.cpio
@@ -118,6 +119,10 @@ $(GZ)/$(BR).tar.gz:
 dhcp:
 	sudo journalctl -u isc-dhcp-server -f
 
+.PHONY: tftp
+tftp:
+	sudo journalctl -u tftpd-hpa -f
+
 .PHONY: dhclient
 dhclient:
 	sudo /usr/sbin/dhclient -v -d enp2s0f0
@@ -130,8 +135,8 @@ etc:
 	rsync -r /etc/network/interfaces   etc/network/
 	rsync -r /etc/network/interfaces.d etc/network/
 
-.PHONY: tftp
-tftp:
+.PHONY: services
+services:
 	sudo systemctl enable tftpd-hpa
 	sudo systemctl enable isc-dhcp-server
 
@@ -141,3 +146,10 @@ $(SYSLINUX)/README: $(GZ)/$(SYSLINUX_GZ)
 	xzcat $< | tar x && touch $@
 $(GZ)/$(SYSLINUX_GZ):
 	$(CURL) $@ https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/$(SYSLINUX_GZ)
+
+fw/%: $(SYSLINUX)/bios/core/%
+	cp $< $@
+fw/%: $(SYSLINUX)/bios/com32/elflink/ldlinux/%
+	cp $< $@
+fw/%: $(SYSLINUX)/bios/com32/menu/%
+	cp $< $@
