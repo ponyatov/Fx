@@ -113,3 +113,10 @@ $(GZ)/$(BR).tar.gz:
 .PHONY: dhcp
 dhcp:
 	sudo journalctl -u isc-dhcp-server -r
+
+.PHONY: etc
+etc:
+	rsync -r /etc/default/isc*         etc/default/
+	rsync -r /etc/dhcp/dhcpd.conf      etc/dhcp/
+	rsync -r /etc/network/interfaces   etc/network/
+	rsync -r /etc/network/interfaces.d etc/network/

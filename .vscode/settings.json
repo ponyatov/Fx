@@ -15,6 +15,7 @@
         "*.ini": "fx",
         "*.br": "makefile",
         "*.kernel": "makefile",
+        "etc/**": "shellscript",
     },
 
     // editor
