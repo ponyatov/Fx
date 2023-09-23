@@ -13,7 +13,8 @@ include arch/$(ARCH).mk
 include app/$(APP).mk
 
 # version
-BR_VER = 2023.08
+BR_VER       = 2023.08
+SYSLINUX_VER = 6.03
 
 # dirs
 CWD = $(CURDIR)
@@ -42,6 +43,9 @@ L += -lreadline
 # pkg
 BR = buildroot-$(BR_VER)
 BR_GZ = $(BR).tar.gz
+
+SYSLINUX    = syslinux-$(SYSLINUX_VER)
+SYSLINUX_GZ = $(SYSLINUX).tar.xz
 
 # all
 .PHONY: all
@@ -120,7 +124,21 @@ dhclient:
 
 .PHONY: etc
 etc:
-	rsync -r /etc/default/isc*         etc/default/
+	rsync -r /etc/default/*dhcp*         etc/default/
+	rsync -r /etc/default/*tftp*         etc/default/
 	rsync -r /etc/dhcp/dhcpd.conf      etc/dhcp/
 	rsync -r /etc/network/interfaces   etc/network/
 	rsync -r /etc/network/interfaces.d etc/network/
+
+.PHONY: tftp
+tftp:
+	sudo systemctl enable tftpd-hpa
+	sudo systemctl enable isc-dhcp-server
+
+.PHONY: syslinux
+syslinux: syslinux/$(SYSLINUX)/README
+syslinux/$(SYSLINUX)/README: $(GZ)/$(SYSLINUX_GZ)
+	cd syslinux ; xzcat $< | tar x
+	touch $@
+$(GZ)/$(SYSLINUX_GZ):
+	$(CURL) $@ https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/$(SYSLINUX_GZ)

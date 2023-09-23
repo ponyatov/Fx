@@ -3,3 +3,4 @@ buildroot-*/**
 rc
 tmp/**
 bin/**
+syslinux/**

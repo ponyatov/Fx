@@ -3,5 +3,5 @@
 *.log
 docs/
 buildroot-*/
-!.gitignore
 /rc
+!.gitignore
