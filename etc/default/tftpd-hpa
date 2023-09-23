@@ -3,4 +3,5 @@
 TFTP_USERNAME="ponyatov"
 TFTP_DIRECTORY="/home/ponyatov/fx"
 TFTP_ADDRESS="0.0.0.0:69"
-TFTP_OPTIONS="--secure -v"
+TFTP_OPTIONS="--secure -vv"
+#-c
