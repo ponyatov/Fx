@@ -112,7 +112,11 @@ $(GZ)/$(BR).tar.gz:
 # net
 .PHONY: dhcp
 dhcp:
-	sudo journalctl -u isc-dhcp-server -r
+	sudo journalctl -u isc-dhcp-server -f
+
+.PHONY: dhclient
+dhclient:
+	sudo /usr/sbin/dhclient -v -d enp2s0f0
 
 .PHONY: etc
 etc:
