@@ -31,6 +31,8 @@ Object::Object() {
     pool = this;
 }
 
+Object::Object(std::string V) : Object() { value = V; }
+
 Object::~Object() { assert(ref == 0); }
 
 Object *Object::pool = nullptr;
@@ -44,8 +46,9 @@ void nop() {}
 void halt() { exit(fini()); }
 
 Active::Active() : Object() {}
+Active::Active(std::string V) : Object(V) {}
 
-Cmd::Cmd(void (*F)()) : Active() { fn = F; }
+Cmd::Cmd(void (*F)(), std::string V) : Active(V) { fn = F; }
 
 std::map<std::string, Object *> W;
 std::vector<Object *> D;
@@ -56,14 +59,33 @@ std::string Object::tag() {
     return ret;
 }
 
+std::string Object::val() { return value; }
+
+std::string Object::head() {
+    std::ostringstream os;
+    os << '<' << tag() << ':' << val() << "> @" << this;
+    return os.str();
+}
+
 void Object::exec() {
     std::cerr << "exec:\t" << this << std::endl;
     D.push_back(this);
 }
 
 void Cmd::exec() {
-    std::cerr << "cmd:\t" << this->tag() << std::endl;
+    std::cerr << this->head() << std::endl;
     this->fn();
 }
 
-void repl() {}
+void repl() {
+    static char *line = nullptr;
+    while (true) {
+        line = readline("> ");
+        if (!line) q();
+        if (line && *line) add_history(line);
+        if (line) {
+            free(line);
+            line = nullptr;
+        }
+    }
+}

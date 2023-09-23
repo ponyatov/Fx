@@ -27,6 +27,16 @@
     "files.insertFinalNewline": true,
     // "git.enabled": false,
 
+    // msys
+    "terminal.integrated.profiles.windows": {
+        "MSYS2": {
+            "path": "C:\\msys64\\usr\\bin\\bash.exe",
+            "args": [ "--login", "-i" ],
+            // "path": "C:\\msys64\\mingw64.exe",
+            "env": { "MSYSTEM": "MINGW64", "CHERE_INVOKING": "1" }
+        }
+    },
+
     // clang-format
     "clang-format.executable":     "clang-format",
     "clang-format.fallbackStyle":  "Google",
