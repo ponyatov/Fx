@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <stack>
 #include <map>
 
 /// @defgroup init init
@@ -44,6 +45,17 @@ struct Object {  /// root executable object
 
     /// @name interpreter/compiler
     virtual void exec();
+};
+
+struct Primitive : Object {
+    Primitive();
+};
+
+struct Int : Primitive {
+    int value;
+    std::string val();
+    Int(std::string V);
+    Int(int N);
 };
 
 struct Active : Object {

@@ -11,6 +11,10 @@
     ],
 
     // files
+    "files.exclude":{
+        "buildroot-**": true,
+        "syslinux-**": true,
+    },
     "files.associations": {
         "*.ini": "fx",
         "*.br": "makefile",

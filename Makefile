@@ -36,7 +36,7 @@ CP += tmp/$(MODULE).parser.cpp tmp/$(MODULE).lexer.cpp
 HP += tmp/$(MODULE).parser.hpp tmp/$(MODULE).lexer.hpp
 
 # cfg
-CFLAGS += -Iinc -Itmp
+CFLAGS += -Iinc -Itmp -std=c++17
 CFLAGS += -Og -g2
 
 L += -lreadline
