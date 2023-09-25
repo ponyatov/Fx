@@ -1,5 +1,5 @@
 UI vesamenu.c32
-MENU TITLE Intetix multimedia (c) dponyatov@gmail.com
+MENU TITLE fxLinux multimedia (c) dponyatov@gmail.com
 
 #MENU RESOLUTION 640 480
 MENU BACKGROUND covyl.png
@@ -8,13 +8,13 @@ MENU COLOR sel          7;37;40 #e0ffffff #20ffffff all
 MENU COLOR unsel        37;44   #50ffffff #a0000000 std
 
 LABEL node
-    MENU LABEL fxLinux node
+    MENU LABEL node
     KERNEL bzImage
     INITRD rootfs.cpio
     APPEND vga=ask
 
 LABEL server
-    MENU LABEL fxLinux server
+    MENU LABEL server
 
 LABEL chain
        MENU LABEL chain boot (Windows)
