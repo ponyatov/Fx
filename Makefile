@@ -119,7 +119,7 @@ fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
 QEMU_CFG    += -netdev user,id=mynet0,net=192.168.76.0/24,dhcpstart=192.168.76.9
 QEMU_APPEND += -vga=0x315
 .PHONY: qemu
-qemu: fw/bzImage fw/rootfs.cpio
+qemu: fw
 	$(QEMU) $(QEMU_CFG) \
 		-kernel fw/bzImage -initrd fw/rootfs.cpio \
 		-append $(QEMU_APPEND)
