@@ -165,25 +165,6 @@ $(SYSLINUX)/README: $(GZ)/$(SYSLINUX_GZ)
 $(GZ)/$(SYSLINUX_GZ):
 	$(CURL) $@ https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/$(SYSLINUX_GZ)
 
-fw/%: $(SYSLINUX)/bios/core/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/elflink/ldlinux/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/menu/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/cmenu/libmenu/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/libutil/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/lib/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/gpllib/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/modules/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/chain/%
-	cp $< $@
-
 fw/%: $(SYSLINUX)/bios/com32/hdt/%
 	cp $< $@
 fw/pci.ids: $(GZ)/pci-$(IDS_VER).ids.xz
