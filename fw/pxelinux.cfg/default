@@ -1,8 +1,8 @@
-UI vesamenu.c32
+UI menu.c32
 MENU TITLE fxLinux multimedia (c) dponyatov@gmail.com
 
 #MENU RESOLUTION 640 480
-MENU BACKGROUND covyl.png
+MENU BACKGROUND  bg.png
 
 MENU COLOR sel          7;37;40 #e0ffffff #20ffffff all
 MENU COLOR unsel        37;44   #50ffffff #a0000000 std
