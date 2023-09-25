@@ -145,11 +145,11 @@ HOSTNAME = $(shell hostname)
 .PHONY: etc
 etc:
 	mkdir -p etc/$(HOSTNAME)
-	rsync -r /etc/default/*dhcp*       etc/$(HOSTNAME)/default/
-	rsync -r /etc/default/*tftp*       etc/$(HOSTNAME)/default/
-	rsync -r /etc/dhcp/dhcpd.conf      etc/$(HOSTNAME)/dhcp/
-	rsync -r /etc/network/interfaces   etc/$(HOSTNAME)/network/
-	rsync -r /etc/network/interfaces.d etc/$(HOSTNAME)/network/
+	-rsync -r /etc/default/*dhcp*       etc/$(HOSTNAME)/default/
+	-rsync -r /etc/default/*tftp*       etc/$(HOSTNAME)/default/
+	-rsync -r /etc/dhcp/dhcpd.conf      etc/$(HOSTNAME)/dhcp/
+	-rsync -r /etc/network/interfaces   etc/$(HOSTNAME)/network/
+	-rsync -r /etc/network/interfaces.d etc/$(HOSTNAME)/network/
 
 .PHONY: services
 services:
