@@ -1,0 +1,5 @@
+allow-hotplug enx00a0c6000000
+iface enx00a0c6000000 inet dhcp
+	post-up ifdown wlp3s0
+	post-down ifup wlp3s0
+

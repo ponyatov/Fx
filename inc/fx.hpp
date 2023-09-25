@@ -72,11 +72,12 @@ struct Cmd : Active {
 extern std::map<std::string, Object*> W;  //< vocabulary
 extern std::vector<Object*> D;            //< data stack
 
-extern int yylex();                    //< lexer
-extern int yylineno;                   //< current line
-extern char* yytext;                   //< lexemet: token value
-extern FILE* yyin;                     //< current script file
-extern char* yyfile;                   //< current file name
+extern int yylex();   //< lexer
+extern int yylineno;  //< current line
+extern char* yytext;  //< lexemet: token value
+extern FILE* yyin;    //< current script file
+extern char* yyfile;  //< current file name
+extern YY_BUFFER_STATE yy_scan_string(const char* str);  //<
 extern void yyerror(std::string msg);  //< syntax error callback
 extern int yyparse();                  //< syntax parser
 #include "fx.parser.hpp"

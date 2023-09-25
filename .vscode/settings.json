@@ -20,6 +20,7 @@
         "*.br": "makefile",
         "*.kernel": "makefile",
         "etc/**": "shellscript",
+        "root/etc/**": "shellscript",
     },
 
     // editor
@@ -30,7 +31,7 @@
     "workbench.tree.indent": 24,
     "explorer.autoReveal": false,
     "files.insertFinalNewline": true,
-    // "git.enabled": false,
+    "git.enabled": false,
 
     // msys
     "terminal.integrated.profiles.windows": {
@@ -52,4 +53,15 @@
         "editor.defaultFormatter": "xaver.clang-format",
         "editor.formatOnSave":     true
     },
+
+    // cmake
+    "cmake.buildDirectory":  "${workspaceFolder}/tmp/${workspaceFolderBasename}",
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.configureArgs": [ "-DAPP=${workspaceFolderBasename}" ],
+    "cmake.debugConfig": {
+	    "cwd": "${workspaceFolder}",
+        "args": ["${workspaceFolder}/lib/${workspaceFolderBasename}.ini"]
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cmake.generator": "Unix Makefiles"
 }

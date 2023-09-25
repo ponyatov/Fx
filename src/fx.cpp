@@ -37,7 +37,9 @@ Object::~Object() { assert(ref == 0); }
 
 Object *Object::pool = nullptr;
 
-void init(int argc, char *argv[]) {}
+void init(int argc, char *argv[]) {  //
+    W["?"] = new Cmd(q, "?");
+}
 
 int fini(int err) { return err; }
 
@@ -87,6 +89,8 @@ void repl() {
         if (!line) q();
         if (line && *line) add_history(line);
         if (line) {
+            yy_scan_string(line);
+            yyparse();
             free(line);
             line = nullptr;
         }

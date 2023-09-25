@@ -1,0 +1,36 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+##allow-hotplug enp2s0f0
+##iface enp2s0f0 inet dhcp
+
+#auto enp2s0f0
+#iface enp2s0f0 inet static
+#	address 192.168.1.52
+#	netmask 255.255.255.0 
+
+# The primary network interface
+##allow-hotplug wlp3s0
+##iface wlp3s0 inet dhcp
+
+#	wpa-ssid Keenetic-3403
+#	wpa-psk  3GynZjba
+
+#wpa-ssid Keenetic-6212
+#wpa-psk  LaKviZXd
+
+#	wpa-ssid Masterskaya
+#	wpa-psk  244466666
+
+#wpa-ssid YOTA-1A20
+#wpa-psk  jhOQfKvh
+
+#allow-hotplug enx00a0c6000000
+#iface enx00a0c6000000 inet dhcp
+

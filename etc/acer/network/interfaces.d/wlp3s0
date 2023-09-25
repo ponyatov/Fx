@@ -1,0 +1,16 @@
+auto  wlp3s0
+iface wlp3s0 inet dhcp
+	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf		
+
+iface yota inet dhcp
+	wpa-ssid YOTA-1A20
+	wpa-psk  jhOQfKvh
+
+iface kotovnik inet dhcp
+	wpa-ssid Keenetic-6212
+	wpa-psk  LaKviZXd
+
+iface masterskaya inet dhcp
+	wpa-ssid Masterskaya
+	wpa-psk 244466666
+

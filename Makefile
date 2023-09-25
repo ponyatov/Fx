@@ -34,6 +34,7 @@ C  += src/$(MODULE).cpp
 H  += inc/$(MODULE).hpp
 CP += tmp/$(MODULE).parser.cpp tmp/$(MODULE).lexer.cpp
 HP += tmp/$(MODULE).parser.hpp tmp/$(MODULE).lexer.hpp
+F  += lib/$(MODULE).ini
 
 # cfg
 CFLAGS += -Iinc -Itmp -std=c++17
@@ -50,12 +51,19 @@ SYSLINUX_GZ = $(SYSLINUX).tar.xz
 
 # all
 .PHONY: all
-all: bin/$(MODULE)$(EXE) lib/$(MODULE).ini
+all: $(BIN)/$(MODULE)$(EXE) $(F)
 	$^
 
+$(BIN)/$(MODULE)$(EXE): $(S) $(TMP)/$(MODULE)/Makefile
+	$(MAKE) -C $(TMP)/$(MODULE)
+
+$(TMP)/$(MODULE)/Makefile: $(S)
+	cmake -B $(TMP)/$(MODULE) -S $(CWD) \
+		-DAPP=$(MODULE) -DEXECUTABLE_OUTPUT_PATH=$(BIN)
+
 # rule
-bin/$(MODULE)$(EXE): $(C) $(CP) $(H)
-	$(CXX) $(CFLAGS) -o $@ $(C) $(CP) $(L)
+# bin/$(MODULE)$(EXE): $(C) $(CP) $(H)
+# 	$(CXX) $(CFLAGS) -o $@ $(C) $(CP) $(L)
 tmp/$(MODULE).lexer.cpp: src/$(MODULE).lex
 	flex -o $@ $<
 tmp/$(MODULE).parser.cpp: src/$(MODULE).yacc
@@ -108,11 +116,13 @@ fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
 	fw/hdt.c32 fw/pci.ids \
 	fw/menu.c32 fw/vesamenu.c32 fw/libmenu.c32 fw/libgpl.c32
 
+QEMU_CFG    += -netdev user,id=mynet0,net=192.168.76.0/24,dhcpstart=192.168.76.9
+QEMU_APPEND += -vga=0x315
 .PHONY: qemu
-qemu: fw/bzImage fw/rootfs.cpio
+qemu: fw
 	$(QEMU) $(QEMU_CFG) \
 		-kernel fw/bzImage -initrd fw/rootfs.cpio \
-		-append "vga=ask"
+		-append $(QEMU_APPEND)
 
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@
@@ -133,13 +143,15 @@ tftp:
 dhclient:
 	sudo /usr/sbin/dhclient -v -d enp2s0f0
 
+HOSTNAME = $(shell hostname)
 .PHONY: etc
 etc:
-	rsync -r /etc/default/*dhcp*         etc/default/
-	rsync -r /etc/default/*tftp*         etc/default/
-	rsync -r /etc/dhcp/dhcpd.conf      etc/dhcp/
-	rsync -r /etc/network/interfaces   etc/network/
-	rsync -r /etc/network/interfaces.d etc/network/
+	mkdir -p etc/$(HOSTNAME)
+	-rsync -r /etc/default/*dhcp*         etc/$(HOSTNAME)/default/
+	-rsync -r /etc/default/*tftp*         etc/$(HOSTNAME)/default/
+	-rsync -r /etc/dhcp/dhcpd.conf        etc/$(HOSTNAME)/dhcp/
+	-rsync -r /etc/network/interfaces     etc/$(HOSTNAME)/network/
+	-rsync -r /etc/network/interfaces.d/* etc/$(HOSTNAME)/network/interfaces.d/
 
 .PHONY: services
 services:
@@ -152,25 +164,6 @@ $(SYSLINUX)/README: $(GZ)/$(SYSLINUX_GZ)
 	xzcat $< | tar x && touch $@
 $(GZ)/$(SYSLINUX_GZ):
 	$(CURL) $@ https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/$(SYSLINUX_GZ)
-
-fw/%: $(SYSLINUX)/bios/core/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/elflink/ldlinux/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/menu/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/cmenu/libmenu/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/libutil/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/lib/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/gpllib/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/modules/%
-	cp $< $@
-fw/%: $(SYSLINUX)/bios/com32/chain/%
-	cp $< $@
 
 fw/%: $(SYSLINUX)/bios/com32/hdt/%
 	cp $< $@

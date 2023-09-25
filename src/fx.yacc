@@ -9,5 +9,5 @@
 
 %%
 syntax : | syntax ex
-ex : CMD             { $1->exec(); }
-ex : INT             { D.push_back($1); }
+ex : CMD                 { $1->exec(); }
+   | INT                 { D.push_back($1); }
