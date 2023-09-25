@@ -1,0 +1,5 @@
+DEFAULT node
+LABEL node
+    KERNEL bzImage
+    INITRD rootfs.cpio
+    APPEND vga=0x37D
