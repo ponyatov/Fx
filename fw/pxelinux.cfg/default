@@ -8,13 +8,11 @@ MENU COLOR sel          7;37;40 #e0ffffff #20ffffff all
 MENU COLOR unsel        37;44   #50ffffff #a0000000 std
 
 LABEL node
-    MENU LABEL node
     KERNEL bzImage
     INITRD rootfs.cpio
     APPEND vga=ask
 
 LABEL server
-    MENU LABEL server
 
 LABEL chain
        MENU LABEL chain boot (Windows)
@@ -26,7 +24,6 @@ LABEL hdt
         COM32 hdt.c32
 
 LABEL reboot
-        MENU LABEL Reboot
         COM32 reboot.c32
  
 LABEL off
