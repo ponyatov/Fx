@@ -116,11 +116,13 @@ fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
 	fw/hdt.c32 fw/pci.ids \
 	fw/menu.c32 fw/vesamenu.c32 fw/libmenu.c32 fw/libgpl.c32
 
+QEMU_CFG    += -netdev user,id=mynet0,net=192.168.76.0/24,dhcpstart=192.168.76.9
+QEMU_APPEND += -vga=0x315
 .PHONY: qemu
 qemu: fw/bzImage fw/rootfs.cpio
 	$(QEMU) $(QEMU_CFG) \
 		-kernel fw/bzImage -initrd fw/rootfs.cpio \
-		-append "vga=ask"
+		-append $(QEMU_APPEND)
 
 $(BR)/README.md: $(GZ)/$(BR).tar.gz
 	tar zx < $< && touch $@
