@@ -4,14 +4,16 @@
 
 #include <cxxabi.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
-
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <stack>
 #include <map>
+
+#include <readline/readline.h>
+#include <readline/history.h>
+
+#include <SDL2/SDL.h>
 
 /// @defgroup init init
 /// @{
@@ -114,3 +116,14 @@ extern void get();     //< `( name -- o )` get object from @ref @ by `name`
 extern Object* pop();  //< `( n1 n2 -- n1 )` pop element from @ref D
 extern void push(Object* o);  //< `( -- o )` push element to @ref D
 extern void error(std::string msg, Object* o);  //< raise error
+
+struct GUI : Object {
+    GUI(std::string V);
+};
+
+struct Win : GUI {
+    SDL_Window* window = nullptr;
+    Win(std::string V);
+};
+
+extern void gui();  //< `( -- )` start GUI window

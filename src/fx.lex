@@ -22,6 +22,8 @@ n [0-9]+
 "="             CMD(stor,"="   )
 "@"             CMD( get,"@"   )
 
+"gui"           CMD( gui,"gui" )
+
 [_a-zA-Z][_a-zA-Z0-9]*  TOKEN(Sym,SYM)  // symbol
 
 .               {yyerror("");}          // any undetected char

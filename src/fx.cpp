@@ -37,7 +37,10 @@ void init(int argc, char *argv[]) {  //
     W["?"] = new Cmd(q, "?");
 }
 
-int fini(int err) { return err; }
+int fini(int err) {
+    SDL_Quit();
+    return err;
+}
 
 void nop() {}
 
@@ -55,7 +58,7 @@ void error(std::string msg, Object *o) {
     std::cerr << "\n\n"
               << yyfile << ':' << yylineno << ' ' << msg << ' ' << o->head()
               << "\n\n";
-    exit(-1);
+    exit(fini(-1));
 }
 
 void Sym::exec() {
@@ -161,4 +164,20 @@ void get() {
     assert(o);
     push(o);
     delete name;
+}
+
+void gui() {
+    assert(!SDL_Init(SDL_INIT_VIDEO));
+    // error(SDL_GetError(), new Cmd(gui, "gui"));
+    W["gui"] = new Win("");
+}
+
+GUI::GUI(std::string V) : Object(V) {}
+
+Win::Win(std::string V) : GUI(V) {
+    assert(window = SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,    //
+                                     SDL_WINDOWPOS_UNDEFINED,               //
+                                     (dynamic_cast<Int *>(W["W"]))->value,  //
+                                     (dynamic_cast<Int *>(W["H"]))->value,  //
+                                     SDL_WINDOW_SHOWN));
 }
