@@ -5,8 +5,9 @@
 %defines %union { Object *o; }
 
 %type ex
-%token <o> CMD
+%token <o> CMD INT
 
 %%
 syntax : | syntax ex
-ex : CMD             { $1->exec(); }
+ex : CMD                 { $1->exec(); }
+   | INT                 { D.push_back($1); }

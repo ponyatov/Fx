@@ -37,13 +37,24 @@ Object::~Object() { assert(ref == 0); }
 
 Object *Object::pool = nullptr;
 
-void init(int argc, char *argv[]) {}
+void init(int argc, char *argv[]) {  //
+    W["?"] = new Cmd(q, "?");
+}
 
 int fini(int err) { return err; }
 
 void nop() {}
 
 void halt() { exit(fini()); }
+
+Primitive::Primitive() : Object() {}
+
+Int::Int(std::string V) : Primitive() { value = stoi(V); }
+std::string Int::val() {
+    std::ostringstream os;
+    os << value;
+    return os.str();
+}
 
 Active::Active() : Object() {}
 Active::Active(std::string V) : Object(V) {}
@@ -67,24 +78,36 @@ std::string Object::head() {
     return os.str();
 }
 
-void Object::exec() {
-    std::cerr << "exec:\t" << this << std::endl;
-    D.push_back(this);
-}
+void Object::exec() { D.push_back(this); }
 
-void Cmd::exec() {
-    std::cerr << this->head() << std::endl;
-    this->fn();
-}
+void Cmd::exec() { this->fn(); }
 
 void repl() {
     static char *line = nullptr;
     while (true) {
         line = readline("> ");
+        if (!line) q();
         if (line && *line) add_history(line);
         if (line) {
+            yy_scan_string(line);
+            yyparse();
             free(line);
             line = nullptr;
         }
     }
+}
+
+void q() {
+    std::ostringstream os;
+    //
+    os << "\n\nW:";
+    for (auto const &[name, word] : W)  //
+        os << "\n\t" << name << '=' << word->head();
+    os << "\n\nD:";
+    //
+    for (auto &d : D)  //
+        os << "\n\t" << d->head();
+    os << "\n\n";
+    //
+    std::cout << os.str();
 }

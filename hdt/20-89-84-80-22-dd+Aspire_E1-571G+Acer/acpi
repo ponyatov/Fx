@@ -1,0 +1,311 @@
+{
+    "is_acpi_valid" : true,
+    "acpi.apic.detected" : true
+}[
+    {
+        "acpi.item" : "local_apic",
+        "acpi.local_apic.address" : "0xfee00000",
+        "acpi.processor_local_apic.count" : 8
+    },
+    {
+        "acpi.cpu.apic_id" : 0,
+        "acpi.cpu.apic_id (hex)" : "0x00",
+        "acpi.cpu.acpi_id (hex)" : "0x01",
+        "acpi.lapic.enabled" : "enabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 1,
+        "acpi.cpu.apic_id (hex)" : "0x01",
+        "acpi.cpu.acpi_id (hex)" : "0x02",
+        "acpi.lapic.enabled" : "enabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 2,
+        "acpi.cpu.apic_id (hex)" : "0x02",
+        "acpi.cpu.acpi_id (hex)" : "0x03",
+        "acpi.lapic.enabled" : "enabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 3,
+        "acpi.cpu.apic_id (hex)" : "0x03",
+        "acpi.cpu.acpi_id (hex)" : "0x04",
+        "acpi.lapic.enabled" : "enabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 0,
+        "acpi.cpu.apic_id (hex)" : "0x00",
+        "acpi.cpu.acpi_id (hex)" : "0x05",
+        "acpi.lapic.enabled" : "disabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 0,
+        "acpi.cpu.apic_id (hex)" : "0x00",
+        "acpi.cpu.acpi_id (hex)" : "0x06",
+        "acpi.lapic.enabled" : "disabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 0,
+        "acpi.cpu.apic_id (hex)" : "0x00",
+        "acpi.cpu.acpi_id (hex)" : "0x07",
+        "acpi.lapic.enabled" : "disabled"
+    },
+    {
+        "acpi.cpu.apic_id" : 0,
+        "acpi.cpu.apic_id (hex)" : "0x00",
+        "acpi.cpu.acpi_id (hex)" : "0x08",
+        "acpi.lapic.enabled" : "disabled"
+    }
+][
+    {
+        "acpi.item" : "local_apic_nmi",
+        "acpi.local_apic_nmi.count" : 0
+    }
+][
+    {
+        "acpi.item" : "io_apic",
+        "acpi.io_apic.count" : 1
+    },
+    {
+        "acpi.io_apic.number" : 0,
+        "acpi.io_apic.apic_id" : "0x00",
+        "acpi.io_apic.adress" : "0xfec00000",
+        "acpi.io_apic.gsi" : "0-23"
+    }
+][
+    {
+        "acpi.item" : "interrupt_source_override",
+        "acpi.interrupt_source_override.count" : 2
+    },
+    {
+        "acpi.interrupt_source_override.bus_type" : "ISA",
+        "acpi.interrupt_source_override.bus" : 0,
+        "acpi.interrupt_source_override.bus_irq" : 0,
+        "acpi.interrupt_source_override.global_irq" : 2,
+        "acpi.interrupt_source_override.flags" : "default default"
+    },
+    {
+        "acpi.interrupt_source_override.bus_type" : "ISA",
+        "acpi.interrupt_source_override.bus" : 0,
+        "acpi.interrupt_source_override.bus_irq" : 9,
+        "acpi.interrupt_source_override.global_irq" : 9,
+        "acpi.interrupt_source_override.flags" : "high edge"
+    }
+][
+    {
+        "acpi.item" : "rsdp",
+        "acpi.rsdp.is_valid" : "true"
+    },
+    {
+        "acpi.rsdp.revision" : "0x002",
+        "acpi.rsdp.oem_id" : "ACRSYS",
+        "acpi.rsdp.address" : "0x000fe020"
+    }
+][
+    {
+        "acpi.item" : "rsdt",
+        "acpi.rsdt.is_valid" : "true"
+    },
+    {
+        "acpi.rsdt.signature" : "RSDT",
+        "acpi.rsdt.revision" : "0x001",
+        "acpi.rsdt.oem_id" : "ACRSYS",
+        "acpi.rsdt.oem_table_id" : "ACRPRDCT",
+        "acpi.rsdt.oem_revision" : "0x00000001",
+        "acpi.rsdt.creator_id" : "    ",
+        "acpi.rsdt.creator_revision" : "0x01000013",
+        "acpi.rsdt.address" : "0x96ffe124"
+    }
+][
+    {
+        "acpi.item" : "xsdt",
+        "acpi.xsdt.is_valid" : "true"
+    },
+    {
+        "acpi.xsdt.signature" : "XSDT",
+        "acpi.xsdt.revision" : "0x001",
+        "acpi.xsdt.oem_id" : "ACRSYS",
+        "acpi.xsdt.oem_table_id" : "ACRPRDCT",
+        "acpi.xsdt.oem_revision" : "0x00000001",
+        "acpi.xsdt.creator_id" : "    ",
+        "acpi.xsdt.creator_revision" : "0x01000013",
+        "acpi.xsdt.address" : "0x96ffe210"
+    }
+][
+    {
+        "acpi.item" : "fadt",
+        "acpi.fadt.is_valid" : "true"
+    },
+    {
+        "acpi.fadt.signature" : "FADT",
+        "acpi.fadt.revision" : "0x005",
+        "acpi.fadt.oem_id" : "ACRSYS",
+        "acpi.fadt.oem_table_id" : "ACRPRDCT",
+        "acpi.fadt.oem_revision" : "0x00000001",
+        "acpi.fadt.creator_id" : "1025",
+        "acpi.fadt.creator_revision" : "0x00040000",
+        "acpi.fadt.address" : "0x96ffb000"
+    }
+][
+    {
+        "acpi.item" : "dsdt",
+        "acpi.dsdt.is_valid" : "true"
+    },
+    {
+        "acpi.dsdt.signature" : "DSDT",
+        "acpi.dsdt.revision" : "0x001",
+        "acpi.dsdt.oem_id" : "ACRSYS",
+        "acpi.dsdt.oem_table_id" : "ACRPRDCT",
+        "acpi.dsdt.oem_revision" : "0x00000000",
+        "acpi.dsdt.creator_id" : "1025",
+        "acpi.dsdt.creator_revision" : "0x00040000",
+        "acpi.dsdt.address" : "0x96fec000"
+    }
+][
+    {
+        "acpi.item" : "sbst",
+        "acpi.sbst.is_valid" : "false"
+    }
+][
+    {
+        "acpi.item" : "ecdt",
+        "acpi.ecdt.is_valid" : "false"
+    }
+][
+    {
+        "acpi.item" : "hpet",
+        "acpi.hpet.is_valid" : "true"
+    },
+    {
+        "acpi.hpet.signature" : "HPET",
+        "acpi.hpet.revision" : "0x001",
+        "acpi.hpet.oem_id" : "ACRSYS",
+        "acpi.hpet.oem_table_id" : "ACRPRDCT",
+        "acpi.hpet.oem_revision" : "0x00000001",
+        "acpi.hpet.creator_id" : "1025",
+        "acpi.hpet.creator_revision" : "0x00040000",
+        "acpi.hpet.address" : "0x96ffa000"
+    }
+][
+    {
+        "acpi.item" : "tcpa",
+        "acpi.tcpa.is_valid" : "false"
+    }
+][
+    {
+        "acpi.item" : "mcfg",
+        "acpi.mcfg.is_valid" : "true"
+    },
+    {
+        "acpi.mcfg.signature" : "MCFG",
+        "acpi.mcfg.revision" : "0x001",
+        "acpi.mcfg.oem_id" : "ACRSYS",
+        "acpi.mcfg.oem_table_id" : "ACRPRDCT",
+        "acpi.mcfg.oem_revision" : "0x00000001",
+        "acpi.mcfg.creator_id" : "1025",
+        "acpi.mcfg.creator_revision" : "0x00040000",
+        "acpi.mcfg.address" : "0x96ff8000"
+    }
+][
+    {
+        "acpi.item" : "slic",
+        "acpi.slic.is_valid" : "false"
+    }
+][
+    {
+        "acpi.item" : "boot",
+        "acpi.boot.is_valid" : "true"
+    },
+    {
+        "acpi.boot.signature" : "BOOT",
+        "acpi.boot.revision" : "0x001",
+        "acpi.boot.oem_id" : "ACRSYS",
+        "acpi.boot.oem_table_id" : "ACRPRDCT",
+        "acpi.boot.oem_revision" : "0x00000001",
+        "acpi.boot.creator_id" : "1025",
+        "acpi.boot.creator_revision" : "0x00040000",
+        "acpi.boot.address" : "0x96fe9000"
+    }
+][
+    {
+        "acpi.item" : "madt",
+        "acpi.madt.is_valid" : "true"
+    },
+    {
+        "acpi.madt.signature" : "APIC",
+        "acpi.madt.revision" : "0x003",
+        "acpi.madt.oem_id" : "ACRSYS",
+        "acpi.madt.oem_table_id" : "ACRPRDCT",
+        "acpi.madt.oem_revision" : "0x00000001",
+        "acpi.madt.creator_id" : "1025",
+        "acpi.madt.creator_revision" : "0x00040000",
+        "acpi.madt.address" : "0x96ff9000"
+    }
+][
+    {
+        "acpi.item" : "ssdt",
+        "acpi.ssdt.is_valid" : "true"
+    },
+    {
+        "acpi.ssdt.signature" : "SSDT",
+        "acpi.ssdt.revision" : "0x001",
+        "acpi.ssdt.oem_id" : "ACRSYS",
+        "acpi.ssdt.oem_table_id" : "ACRPRDCT",
+        "acpi.ssdt.oem_revision" : "0x00001000",
+        "acpi.ssdt.creator_id" : "1025",
+        "acpi.ssdt.creator_revision" : "0x00040000",
+        "acpi.ssdt.address" : "0x96feb000"
+    }
+][
+    {
+        "acpi.item" : "ssdt",
+        "acpi.ssdt.is_valid" : "true"
+    },
+    {
+        "acpi.ssdt.signature" : "SSDT",
+        "acpi.ssdt.revision" : "0x001",
+        "acpi.ssdt.oem_id" : "ACRSYS",
+        "acpi.ssdt.oem_table_id" : "ACRPRDCT",
+        "acpi.ssdt.oem_revision" : "0x00003000",
+        "acpi.ssdt.creator_id" : "1025",
+        "acpi.ssdt.creator_revision" : "0x00040000",
+        "acpi.ssdt.address" : "0x96fdf000"
+    }
+][
+    {
+        "acpi.item" : "ssdt",
+        "acpi.ssdt.is_valid" : "true"
+    },
+    {
+        "acpi.ssdt.signature" : "SSDT",
+        "acpi.ssdt.revision" : "0x001",
+        "acpi.ssdt.oem_id" : "ACRSYS",
+        "acpi.ssdt.oem_table_id" : "ACRPRDCT",
+        "acpi.ssdt.oem_revision" : "0x00003000",
+        "acpi.ssdt.creator_id" : "1025",
+        "acpi.ssdt.creator_revision" : "0x00040000",
+        "acpi.ssdt.address" : "0x96fde000"
+    }
+][
+    {
+        "acpi.item" : "ssdt",
+        "acpi.ssdt.is_valid" : "true"
+    },
+    {
+        "acpi.ssdt.signature" : "SSDT",
+        "acpi.ssdt.revision" : "0x001",
+        "acpi.ssdt.oem_id" : "ACRSYS",
+        "acpi.ssdt.oem_table_id" : "ACRPRDCT",
+        "acpi.ssdt.oem_revision" : "0x00001000",
+        "acpi.ssdt.creator_id" : "1025",
+        "acpi.ssdt.creator_revision" : "0x00040000",
+        "acpi.ssdt.address" : "0x96fda000"
+    }
+][
+    {
+        "acpi.item" : "facs",
+        "acpi.facs.is_valid" : "true"
+    },
+    {
+        "acpi.facs.address" : "0x96fba000"
+    }
+]

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <stack>
 #include <map>
 
 /// @defgroup init init
@@ -46,6 +47,17 @@ struct Object {  /// root executable object
     virtual void exec();
 };
 
+struct Primitive : Object {
+    Primitive();
+};
+
+struct Int : Primitive {
+    int value;
+    std::string val();
+    Int(std::string V);
+    Int(int N);
+};
+
 struct Active : Object {
     Active();
     Active(std::string V);
@@ -60,11 +72,12 @@ struct Cmd : Active {
 extern std::map<std::string, Object*> W;  //< vocabulary
 extern std::vector<Object*> D;            //< data stack
 
-extern int yylex();                    //< lexer
-extern int yylineno;                   //< current line
-extern char* yytext;                   //< lexemet: token value
-extern FILE* yyin;                     //< current script file
-extern char* yyfile;                   //< current file name
+extern int yylex();   //< lexer
+extern int yylineno;  //< current line
+extern char* yytext;  //< lexemet: token value
+extern FILE* yyin;    //< current script file
+extern char* yyfile;  //< current file name
+extern YY_BUFFER_STATE yy_scan_string(const char* str);  //<
 extern void yyerror(std::string msg);  //< syntax error callback
 extern int yyparse();                  //< syntax parser
 #include "fx.parser.hpp"
@@ -84,3 +97,4 @@ extern int yyparse();                  //< syntax parser
 extern void nop();   //< `( -- )` empty command
 extern void halt();  //< `( -- )` stop system
 extern void repl();  //< `( -- )` start interactive REPL console
+extern void q();     //< `( -- )` debug dump: @ref D & @ref W

@@ -1,0 +1,23 @@
+{
+    "is_pxe_valid" : true,
+    "pxe.vendor_id" : "0x14e4",
+    "pxe.product_id" : "0x16b5",
+    "pxe.subvendor_id" : "0x1025",
+    "pxe.subproduct_id" : "0x647",
+    "Manufacturer_name" : "Broadcom Inc. and subsidiaries",
+    "Product_name" : "NetLink BCM57785 Gigabit Ethernet PCIe",
+    "pxe.rev" : 16,
+    "pxe.pci_bus" : 2,
+    "pxe.pci_dev" : 0,
+    "pxe.pci_func" : 0,
+    "pxe.base_class" : 2,
+    "pxe.sub_class" : 0,
+    "pxe.prog_intf" : 0,
+    "pxe.nictype" : 2,
+    "pxe.mac_addr" : "20:89:84:80:22:dd",
+    "pxe.client_ip" : "0.0.0.0",
+    "pxe.next_server_ip" : "0.0.0.0",
+    "pxe.relay_agent_ip" : "0.0.0.0",
+    "pxe.ipaddr" : "192.168.1.52",
+    "gpxe_detected" : false
+}

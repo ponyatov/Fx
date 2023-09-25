@@ -1,0 +1,249 @@
+{
+    "Memory configuration" : "true"
+}{
+    "dmi.item" : "memory via 88",
+    "memory.size (KiB)" : 64512,
+    "memory.size (MiB)" : 63
+}{
+    "dmi.item" : "memory via e801",
+    "memory.total.size (KiB)" : 523264,
+    "memory.total.size (MiB)" : 511,
+    "memory.low.size (KiB)" : 15360,
+    "memory.low.size (MiB)" : 15,
+    "memory.high.size (KiB)" : 507904,
+    "memory.high.size (MiB)" : 496
+}{
+    "dmi.item" : "memory via e820",
+    "memory.total.size (KiB)" : 8203888,
+    "memory.total.size (MiB)" : 8012
+}{
+    "memory.segment.start" : "0x0000000000000000",
+    "memory.segment.size " : "0x000000000009d400",
+    "memory.segment.end  " : "0x000000000009d400",
+    "memory.segment.type " : "usable"
+}{
+    "memory.segment.start" : "0x000000000009d400",
+    "memory.segment.size " : "0x0000000000002c00",
+    "memory.segment.end  " : "0x00000000000a0000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000000e0000",
+    "memory.segment.size " : "0x0000000000020000",
+    "memory.segment.end  " : "0x0000000000100000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x0000000000100000",
+    "memory.segment.size " : "0x000000001ff00000",
+    "memory.segment.end  " : "0x0000000020000000",
+    "memory.segment.type " : "usable"
+}{
+    "memory.segment.start" : "0x0000000020000000",
+    "memory.segment.size " : "0x0000000000200000",
+    "memory.segment.end  " : "0x0000000020200000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x0000000020200000",
+    "memory.segment.size " : "0x000000001fe04000",
+    "memory.segment.end  " : "0x0000000040004000",
+    "memory.segment.type " : "usable"
+}{
+    "memory.segment.start" : "0x0000000040004000",
+    "memory.segment.size " : "0x0000000000001000",
+    "memory.segment.end  " : "0x0000000040005000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x0000000040005000",
+    "memory.segment.size " : "0x0000000050dab000",
+    "memory.segment.end  " : "0x0000000090db0000",
+    "memory.segment.type " : "usable"
+}{
+    "memory.segment.start" : "0x0000000090db0000",
+    "memory.segment.size " : "0x0000000001400000",
+    "memory.segment.end  " : "0x00000000921b0000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000921b0000",
+    "memory.segment.size " : "0x000000000490f000",
+    "memory.segment.end  " : "0x0000000096abf000",
+    "memory.segment.type " : "usable"
+}{
+    "memory.segment.start" : "0x0000000096abf000",
+    "memory.segment.size " : "0x0000000000400000",
+    "memory.segment.end  " : "0x0000000096ebf000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x0000000096ebf000",
+    "memory.segment.size " : "0x0000000000100000",
+    "memory.segment.end  " : "0x0000000096fbf000",
+    "memory.segment.type " : "ACPI NVS"
+}{
+    "memory.segment.start" : "0x0000000096fbf000",
+    "memory.segment.size " : "0x0000000000040000",
+    "memory.segment.end  " : "0x0000000096fff000",
+    "memory.segment.type " : "ACPI reclaim"
+}{
+    "memory.segment.start" : "0x0000000096fff000",
+    "memory.segment.size " : "0x0000000000001000",
+    "memory.segment.end  " : "0x0000000097000000",
+    "memory.segment.type " : "usable"
+}{
+    "memory.segment.start" : "0x0000000097000000",
+    "memory.segment.size " : "0x0000000008a00000",
+    "memory.segment.end  " : "0x000000009fa00000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000f0000000",
+    "memory.segment.size " : "0x0000000004000000",
+    "memory.segment.end  " : "0x00000000f4000000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000feb00000",
+    "memory.segment.size " : "0x0000000000004000",
+    "memory.segment.end  " : "0x00000000feb04000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000fec00000",
+    "memory.segment.size " : "0x0000000000001000",
+    "memory.segment.end  " : "0x00000000fec01000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000fed10000",
+    "memory.segment.size " : "0x000000000000a000",
+    "memory.segment.end  " : "0x00000000fed1a000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000fed1c000",
+    "memory.segment.size " : "0x0000000000004000",
+    "memory.segment.end  " : "0x00000000fed20000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000fee00000",
+    "memory.segment.size " : "0x0000000000001000",
+    "memory.segment.end  " : "0x00000000fee01000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x00000000ffc80000",
+    "memory.segment.size " : "0x0000000000380000",
+    "memory.segment.end  " : "0x0000000100000000",
+    "memory.segment.type " : "reserved"
+}{
+    "memory.segment.start" : "0x0000000100000000",
+    "memory.segment.size " : "0x000000015f600000",
+    "memory.segment.end  " : "0x000000025f600000",
+    "memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x0000000000000000",
+    "sanitized_memory.segment.size " : "0x000000000009d400",
+    "sanitized_memory.segment.end  " : "0x000000000009d400",
+    "sanitized_memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x000000000009d400",
+    "sanitized_memory.segment.size " : "0x0000000000002c00",
+    "sanitized_memory.segment.end  " : "0x00000000000a0000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000000e0000",
+    "sanitized_memory.segment.size " : "0x0000000000020000",
+    "sanitized_memory.segment.end  " : "0x0000000000100000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x0000000000100000",
+    "sanitized_memory.segment.size " : "0x000000001ff00000",
+    "sanitized_memory.segment.end  " : "0x0000000020000000",
+    "sanitized_memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x0000000020000000",
+    "sanitized_memory.segment.size " : "0x0000000000200000",
+    "sanitized_memory.segment.end  " : "0x0000000020200000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x0000000020200000",
+    "sanitized_memory.segment.size " : "0x000000001fe04000",
+    "sanitized_memory.segment.end  " : "0x0000000040004000",
+    "sanitized_memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x0000000040004000",
+    "sanitized_memory.segment.size " : "0x0000000000001000",
+    "sanitized_memory.segment.end  " : "0x0000000040005000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x0000000040005000",
+    "sanitized_memory.segment.size " : "0x0000000050dab000",
+    "sanitized_memory.segment.end  " : "0x0000000090db0000",
+    "sanitized_memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x0000000090db0000",
+    "sanitized_memory.segment.size " : "0x0000000001400000",
+    "sanitized_memory.segment.end  " : "0x00000000921b0000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000921b0000",
+    "sanitized_memory.segment.size " : "0x000000000490f000",
+    "sanitized_memory.segment.end  " : "0x0000000096abf000",
+    "sanitized_memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x0000000096abf000",
+    "sanitized_memory.segment.size " : "0x0000000000400000",
+    "sanitized_memory.segment.end  " : "0x0000000096ebf000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x0000000096ebf000",
+    "sanitized_memory.segment.size " : "0x0000000000100000",
+    "sanitized_memory.segment.end  " : "0x0000000096fbf000",
+    "sanitized_memory.segment.type " : "ACPI NVS"
+}{
+    "sanitized_memory.segment.start" : "0x0000000096fbf000",
+    "sanitized_memory.segment.size " : "0x0000000000040000",
+    "sanitized_memory.segment.end  " : "0x0000000096fff000",
+    "sanitized_memory.segment.type " : "ACPI reclaim"
+}{
+    "sanitized_memory.segment.start" : "0x0000000096fff000",
+    "sanitized_memory.segment.size " : "0x0000000000001000",
+    "sanitized_memory.segment.end  " : "0x0000000097000000",
+    "sanitized_memory.segment.type " : "usable"
+}{
+    "sanitized_memory.segment.start" : "0x0000000097000000",
+    "sanitized_memory.segment.size " : "0x0000000008a00000",
+    "sanitized_memory.segment.end  " : "0x000000009fa00000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000f0000000",
+    "sanitized_memory.segment.size " : "0x0000000004000000",
+    "sanitized_memory.segment.end  " : "0x00000000f4000000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000feb00000",
+    "sanitized_memory.segment.size " : "0x0000000000004000",
+    "sanitized_memory.segment.end  " : "0x00000000feb04000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000fec00000",
+    "sanitized_memory.segment.size " : "0x0000000000001000",
+    "sanitized_memory.segment.end  " : "0x00000000fec01000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000fed10000",
+    "sanitized_memory.segment.size " : "0x000000000000a000",
+    "sanitized_memory.segment.end  " : "0x00000000fed1a000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000fed1c000",
+    "sanitized_memory.segment.size " : "0x0000000000004000",
+    "sanitized_memory.segment.end  " : "0x00000000fed20000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000fee00000",
+    "sanitized_memory.segment.size " : "0x0000000000001000",
+    "sanitized_memory.segment.end  " : "0x00000000fee01000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x00000000ffc80000",
+    "sanitized_memory.segment.size " : "0x0000000000380000",
+    "sanitized_memory.segment.end  " : "0x0000000100000000",
+    "sanitized_memory.segment.type " : "reserved"
+}{
+    "sanitized_memory.segment.start" : "0x0000000100000000",
+    "sanitized_memory.segment.size " : "0x000000015f600000",
+    "sanitized_memory.segment.end  " : "0x000000025f600000",
+    "sanitized_memory.segment.type " : "usable"
+}

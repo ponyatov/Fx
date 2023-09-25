@@ -1,0 +1,51 @@
+{
+    "disks->is_valid" : true
+}[
+    {
+        "disk->number" : "0x80",
+        "disk->cylinders" : 1023,
+        "disk->heads" : 255,
+        "disk->sectors_per_track" : 63,
+        "disk->edd_version" : "30",
+        "disk->size" : "111.79 GiB",
+        "disk->bytes_per_sector" : 512,
+        "disk->sectors_per_track" : 63,
+        "disk->host_bus" : "PCI SATA",
+        "disk->interface_type" : "SATA",
+        "disk->mbr_name" : "Grub2 (v1.97)",
+        "disk->mbr_id" : 3949170704
+    },
+    {
+        "partition->number" : 1,
+        "partition->sector_start" : 2048,
+        "partition->sector_end" : 234440703,
+        "partition->size" : "111.78 GiB",
+        "partition->type" : "Linux native (usually ext2fs)",
+        "partition->os_type" : "83",
+        "partition->boot_flag" : "true"
+    }
+][
+    {
+        "disk->number" : "0x81",
+        "disk->cylinders" : 1023,
+        "disk->heads" : 255,
+        "disk->sectors_per_track" : 63,
+        "disk->edd_version" : "30",
+        "disk->size" : "298.09 GiB",
+        "disk->bytes_per_sector" : 512,
+        "disk->sectors_per_track" : 63,
+        "disk->host_bus" : "PCI SATA",
+        "disk->interface_type" : "SATA",
+        "disk->mbr_name" : "Grub2 (v1.97)",
+        "disk->mbr_id" : 3949170896
+    },
+    {
+        "partition->number" : 1,
+        "partition->sector_start" : 2048,
+        "partition->sector_end" : 625139711,
+        "partition->size" : "298.08 GiB",
+        "partition->type" : "NTFS/exFAT/HPFS",
+        "partition->os_type" : "07",
+        "partition->boot_flag" : "true"
+    }
+]
