@@ -33,8 +33,14 @@ Object::~Object() { assert(ref == 0); }
 
 Object *Object::pool = nullptr;
 
+void Object::push(Object *o) { nest.push_back(o); }
+
 void init(int argc, char *argv[]) {  //
     W["?"] = new Cmd(q, "?");
+    W["argc"] = new Int(argc);
+    Vector *v = new Vector("argv");
+    W["argv"] = v;
+    v->push(new Str(argv[0]));
 }
 
 int fini(int err) {
@@ -70,11 +76,19 @@ void Sym::exec() {
 }
 
 Int::Int(std::string V) : Primitive() { value = stoi(V); }
+Int::Int(int N) : Primitive() { value = N; }
+
 std::string Int::val() {
     std::ostringstream os;
     os << value;
     return os.str();
 }
+
+Container::Container() : Object() {}
+Container::Container(std::string V) : Object(V) {}
+
+Vector::Vector() : Container() {}
+Vector::Vector(std::string V) : Container(V) {}
 
 Active::Active() : Object() {}
 Active::Active(std::string V) : Object(V) {}
@@ -169,7 +183,7 @@ void get() {
 void gui() {
     assert(!SDL_Init(SDL_INIT_VIDEO));
     // error(SDL_GetError(), new Cmd(gui, "gui"));
-    W["gui"] = new Win("");
+    W["gui"] = new Win(W["argv"]->nest[0]->value);
 }
 
 GUI::GUI(std::string V) : Object(V) {}

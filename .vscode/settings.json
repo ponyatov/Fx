@@ -10,8 +10,8 @@
                     "args": {"text": "\u000D clear ; LANG=C make all \u000D"}}]}
     ],
 
+    "files.exclude":{
     // files
-    "files.watcherExclude":{
         "buildroot-**": true,
         "syslinux-**": true,
     },
