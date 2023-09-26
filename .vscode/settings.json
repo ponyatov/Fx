@@ -11,7 +11,7 @@
     ],
 
     // files
-    "files.exclude":{
+    "files.watcherExclude":{
         "buildroot-**": true,
         "syslinux-**": true,
     },
