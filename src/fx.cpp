@@ -1,4 +1,5 @@
 #include "fx.hpp"
+#include "fx.lexer.hpp"
 
 int main(int argc, char *argv[]) {  //
     arg(0, argv[0]);
@@ -18,12 +19,7 @@ void arg(int argc, char *argv) {  //
     std::cerr << "argv[" << argc << "] = <" << argv << ">\n";
 }
 
-void yyerror(std::string msg) {
-    std::cerr << "\n\n"
-              << yyfile << ':' << yylineno << ' ' << msg << " [" << yytext
-              << "]\n\n";
-    exit(-1);
-}
+void yyerror(std::string msg) { error(msg, new Str(yytext)); }
 
 Object::Object() {
     ref = 0;
@@ -41,13 +37,37 @@ void init(int argc, char *argv[]) {  //
     W["?"] = new Cmd(q, "?");
 }
 
-int fini(int err) { return err; }
+int fini(int err) {
+    SDL_Quit();
+    return err;
+}
 
 void nop() {}
 
 void halt() { exit(fini()); }
 
 Primitive::Primitive() : Object() {}
+
+Primitive::Primitive(std::string V) : Object(V) {}
+
+Sym::Sym(std::string V) : Primitive(V) {}
+
+Str::Str(std::string V) : Primitive(V) {}
+
+void error(std::string msg, Object *o) {
+    std::cerr << "\n\n"
+              << yyfile << ':' << yylineno << ' ' << msg << ' ' << o->head()
+              << "\n\n";
+    exit(fini(-1));
+}
+
+void Sym::exec() {
+    Object *o = W[value];
+    if (!o) {
+        error("unknown", this);
+    } else
+        o->exec();
+}
 
 Int::Int(std::string V) : Primitive() { value = stoi(V); }
 std::string Int::val() {
@@ -87,8 +107,8 @@ void repl() {
     while (true) {
         line = readline("> ");
         if (!line) q();
-        if (line && *line) add_history(line);
-        if (line) {
+        if (line && *line) {
+            add_history(line);
             yy_scan_string(line);
             yyparse();
             free(line);
@@ -102,12 +122,62 @@ void q() {
     //
     os << "\n\nW:";
     for (auto const &[name, word] : W)  //
-        os << "\n\t" << name << '=' << word->head();
-    os << "\n\nD:";
+        os << "\n\t" << name << " = " << word->head();
     //
+    os << "\n\nD:";
     for (auto &d : D)  //
         os << "\n\t" << d->head();
-    os << "\n\n";
     //
+    os << "\n\n";
     std::cout << os.str();
+}
+
+void dot() { D.clear(); }
+
+void tick() {
+    yylex();
+    D.push_back(yylval.o);
+}
+
+Object *pop() {
+    assert(!D.empty());
+    Object *o = D.back();
+    D.pop_back();
+    return o;
+}
+
+void push(Object *o) {
+    D.push_back(o);
+    o->ref++;
+}
+
+void stor() {
+    Object *name = pop();
+    Object *o = pop();
+    W[name->value] = o;
+    delete name;
+}
+
+void get() {
+    Object *name = pop();
+    Object *o = W[name->value];
+    assert(o);
+    push(o);
+    delete name;
+}
+
+void gui() {
+    assert(!SDL_Init(SDL_INIT_VIDEO));
+    // error(SDL_GetError(), new Cmd(gui, "gui"));
+    W["gui"] = new Win("");
+}
+
+GUI::GUI(std::string V) : Object(V) {}
+
+Win::Win(std::string V) : GUI(V) {
+    assert(window = SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,    //
+                                     SDL_WINDOWPOS_UNDEFINED,               //
+                                     (dynamic_cast<Int *>(W["W"]))->value,  //
+                                     (dynamic_cast<Int *>(W["H"]))->value,  //
+                                     SDL_WINDOW_SHOWN));
 }

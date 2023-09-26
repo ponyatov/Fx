@@ -8,8 +8,8 @@
 s [+\-]?
 n [0-9]+
 %%
-#.*             {}                  // line comment
-[ \t\r\n]+      {}                  // drop spaces
+#.*             {}                      // line comment
+[ \t\r\n]+      {}                      // drop spaces
 
 {s}{n}          TOKEN(Int,INT)
 
@@ -17,5 +17,13 @@ n [0-9]+
 "halt"          CMD(halt,"halt")
 "repl"          CMD(repl,"repl")
 "?"             CMD(   q,"?"   )
+"."             CMD( dot,"."   )
+"`"             CMD(tick,"`"   )
+"="             CMD(stor,"="   )
+"@"             CMD( get,"@"   )
 
-.               {yyerror("");}      // any undetected char
+"gui"           CMD( gui,"gui" )
+
+[_a-zA-Z][_a-zA-Z0-9]*  TOKEN(Sym,SYM)  // symbol
+
+.               {yyerror("");}          // any undetected char

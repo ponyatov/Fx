@@ -1,5 +1,8 @@
-UI menu.c32
-MENU TITLE fxLinux multimedia (c) dponyatov@gmail.com
+UI vesamenu.c32
+MENU TITLE fxLinux (c) dponyatov@gmail.com
+
+#DEFAULT fxLinux
+#TIMEOUT 22
 
 #MENU RESOLUTION 640 480
 MENU BACKGROUND  bg.png
@@ -7,12 +10,12 @@ MENU BACKGROUND  bg.png
 MENU COLOR sel          7;37;40 #e0ffffff #20ffffff all
 MENU COLOR unsel        37;44   #50ffffff #a0000000 std
 
-LABEL node
+LABEL fxLinux
     KERNEL bzImage
     INITRD rootfs.cpio
     APPEND vga=ask
 
-LABEL server
+LABEL fxServer
 
 LABEL chain
        MENU LABEL chain boot (Windows)

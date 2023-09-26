@@ -4,14 +4,16 @@
 
 #include <cxxabi.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
-
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <stack>
 #include <map>
+
+#include <readline/readline.h>
+#include <readline/history.h>
+
+#include <SDL2/SDL.h>
 
 /// @defgroup init init
 /// @{
@@ -49,6 +51,16 @@ struct Object {  /// root executable object
 
 struct Primitive : Object {
     Primitive();
+    Primitive(std::string V);
+};
+
+struct Sym : Primitive {
+    Sym(std::string V);
+    void exec();
+};
+
+struct Str : Primitive {
+    Str(std::string V);
 };
 
 struct Int : Primitive {
@@ -72,12 +84,11 @@ struct Cmd : Active {
 extern std::map<std::string, Object*> W;  //< vocabulary
 extern std::vector<Object*> D;            //< data stack
 
-extern int yylex();   //< lexer
-extern int yylineno;  //< current line
-extern char* yytext;  //< lexemet: token value
-extern FILE* yyin;    //< current script file
-extern char* yyfile;  //< current file name
-extern YY_BUFFER_STATE yy_scan_string(const char* str);  //<
+extern int yylex();                    //< lexer
+extern int yylineno;                   //< current line
+extern char* yytext;                   //< lexemet: token value
+extern FILE* yyin;                     //< current script file
+extern char* yyfile;                   //< current file name
 extern void yyerror(std::string msg);  //< syntax error callback
 extern int yyparse();                  //< syntax parser
 #include "fx.parser.hpp"
@@ -94,7 +105,25 @@ extern int yyparse();                  //< syntax parser
         return CMD;               \
     }
 
-extern void nop();   //< `( -- )` empty command
-extern void halt();  //< `( -- )` stop system
-extern void repl();  //< `( -- )` start interactive REPL console
-extern void q();     //< `( -- )` debug dump: @ref D & @ref W
+extern void nop();     //< `( -- )` empty command
+extern void halt();    //< `( -- )` stop system
+extern void repl();    //< `( -- )` start interactive REPL console
+extern void q();       //< `( -- )` debug dump: @ref D & @ref W
+extern void dot();     //< `( ... -- )` clean @ref D
+extern void tick();    //< `( -- token )` parse next token into stack
+extern void stor();    //< `( o name -- )` store o into @ref W with `name`
+extern void get();     //< `( name -- o )` get object from @ref @ by `name`
+extern Object* pop();  //< `( n1 n2 -- n1 )` pop element from @ref D
+extern void push(Object* o);  //< `( -- o )` push element to @ref D
+extern void error(std::string msg, Object* o);  //< raise error
+
+struct GUI : Object {
+    GUI(std::string V);
+};
+
+struct Win : GUI {
+    SDL_Window* window = nullptr;
+    Win(std::string V);
+};
+
+extern void gui();  //< `( -- )` start GUI window
