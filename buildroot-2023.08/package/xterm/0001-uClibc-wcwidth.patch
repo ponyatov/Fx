@@ -1,4 +1,18 @@
-https://lore.kernel.org/buildroot/20230911225550.4fd56980@windsurf/T/
+From: Waldemar Brodkorb @ 2023-09-03  7:51 UTC (permalink / raw)
+  To: buildroot
+
+Compile errors out with:
+./util.c: In function 'decode_wcwidth':
+./util.c:5506:26: error: 'wcwidth' undeclared (first use in this function); did you mean 'mk_wcwidth'?
+ 5506 |             my_wcwidth = wcwidth;
+      |                          ^~~~~~~
+      |                          mk_wcwidth
+./util.c:5506:26: note: each undeclared identifier is reported only once for each function it appears in
+
+uClibc only exposes wcwidth when __USE_XOPEN is defined.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/1c0/1c03a8016d480d9c3fc3112849b1a125df243cab
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
@@ -27,3 +41,4 @@ index 0000000000..ee0416ec78
 + #include <wcwidth.h>
 -- 
 2.39.2
+
