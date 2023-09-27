@@ -181,7 +181,7 @@ void get() {
 }
 
 void gui() {
-    assert(!SDL_Init(SDL_INIT_VIDEO));
+    assert(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO));
     // error(SDL_GetError(), new Cmd(gui, "gui"));
     W["gui"] = new Win(W["argv"]->nest[0]->value);
 }
