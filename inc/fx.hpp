@@ -33,7 +33,8 @@ struct Object {  /// root executable object
     Object* next;         //< next object in @ref pool
 
     /// @name fields
-    std::string value;  //< object name, number/string value
+    std::string value;          //< object name, number/string value
+    std::vector<Object*> nest;  //< nested elements = vector = stack = queue
 
     /// @name constructor
     Object();
@@ -47,6 +48,10 @@ struct Object {  /// root executable object
 
     /// @name interpreter/compiler
     virtual void exec();
+
+    /// @name stack ops
+    void push(Object* o);  //< push to @ref nest
+    Object* pop();         //< pop from @ref nest as a stack
 };
 
 struct Primitive : Object {
@@ -68,6 +73,16 @@ struct Int : Primitive {
     std::string val();
     Int(std::string V);
     Int(int N);
+};
+
+struct Container : Object {
+    Container();
+    Container(std::string V);
+};
+
+struct Vector : Container {
+    Vector();
+    Vector(std::string V);
 };
 
 struct Active : Object {

@@ -43,8 +43,8 @@ CFLAGS += -Og -g2
 L += -lreadline
 
 # pkg
-BR = buildroot-$(BR_VER)
-BR_GZ = $(BR).tar.gz
+BR    = buildroot-$(BR_VER)
+BR_GZ = $(BR).tar.xz
 
 SYSLINUX    = syslinux-$(SYSLINUX_VER)
 SYSLINUX_GZ = $(SYSLINUX).tar.xz
@@ -105,6 +105,7 @@ br: $(BR)/README.md
 	echo 'BR2_TARGET_GENERIC_HOSTNAME="$(APP)"'      >> .config &&\
 	echo 'BR2_TARGET_GENERIC_ISSUE="$(APP) @ $(HW)"' >> .config &&\
 	echo 'BR2_ROOTFS_OVERLAY="$(CWD)/root"'          >> .config &&\
+	echo 'BR2_UCLIBC_CONFIG_FRAGMENT_FILES="$(CWD)/all/all.uclibc"'    >> .config &&\
 	echo 'BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(CWD)/all/all.kernel"' >> .config &&\
 	echo 'BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(CWD)/arch/$(ARCH).kernel $(CWD)/cpu/$(CPU).kernel $(CWD)/hw/$(HW).kernel $(CWD)/app/$(APP).kernel"' >> .config &&\
  	make menuconfig && make linux-menuconfig && make -j$(CORES)
@@ -124,11 +125,10 @@ qemu: fw
 		-kernel fw/bzImage -initrd fw/rootfs.cpio \
 		-append $(QEMU_APPEND)
 
-$(BR)/README.md: $(GZ)/$(BR).tar.gz
-	tar zx < $< && touch $@
-$(GZ)/$(BR).tar.gz:
-	$(CURL) $@ https://github.com/buildroot/buildroot/archive/refs/tags/$(BR_VER).tar.gz
-
+$(BR)/README.md: $(GZ)/$(BR_GZ)
+	xzcat $< | tar x && touch $@
+$(GZ)/$(BR_GZ):
+	$(CURL) $@ https://buildroot.org/downloads/$(BR_GZ)
 
 # net
 .PHONY: dhcp

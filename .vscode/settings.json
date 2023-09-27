@@ -10,8 +10,8 @@
                     "args": {"text": "\u000D clear ; LANG=C make all \u000D"}}]}
     ],
 
-    // files
     "files.exclude":{
+    // files
         "buildroot-**": true,
         "syslinux-**": true,
     },
