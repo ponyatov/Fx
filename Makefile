@@ -110,13 +110,6 @@ br: $(BR)/README.md
 	echo 'BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(CWD)/arch/$(ARCH).kernel $(CWD)/cpu/$(CPU).kernel $(CWD)/hw/$(HW).kernel $(CWD)/app/$(APP).kernel"' >> .config &&\
  	make menuconfig && make linux-menuconfig && make -j$(CORES)
 
-.PHONY: fw
-fw: fw/bzImage fw/rootfs.cpio fw/rootfs.iso9660 \
-	fw/pxelinux.0 fw/ldlinux.c32 fw/libutil.c32 fw/libcom32.c32 \
-	fw/ls.c32 fw/reboot.c32 fw/poweroff.c32 fw/chain.c32 \
-	fw/hdt.c32 fw/pci.ids \
-	fw/menu.c32 fw/vesamenu.c32 fw/libmenu.c32 fw/libgpl.c32
-
 QEMU_CFG    += -netdev user,id=mynet0,net=192.168.76.0/24,dhcpstart=192.168.76.9
 QEMU_APPEND += -vga=0x315
 .PHONY: qemu
@@ -138,6 +131,10 @@ dhcp:
 .PHONY: tftp
 tftp:
 	sudo journalctl -u tftpd-hpa -f
+
+.PHONY: nfs
+nfs:
+	sudo journalctl -u nfs -f
 
 .PHONY: dhclient
 dhclient:
@@ -171,3 +168,14 @@ fw/pci.ids: $(GZ)/pci-$(IDS_VER).ids.xz
 	xzcat $< > $@
 $(GZ)/pci-$(IDS_VER).ids.xz:
 	$(CURL) $@ https://pci-ids.ucw.cz/v$(IDS_VER)/pci.ids.xz
+
+.PHONY: rootfs
+rootfs:
+	cd $(BR) ; make rootfs-cpio
+	$(MAKE) fw
+
+.PHONY: fw
+fw: fw/bios/bzImage fw/bios/rootfs.cpio
+
+fw/bios/%: $(BR)/output/images/%
+	cp $< $@

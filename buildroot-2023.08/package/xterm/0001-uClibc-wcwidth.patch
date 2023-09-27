@@ -1,0 +1,44 @@
+From: Waldemar Brodkorb @ 2023-09-03  7:51 UTC (permalink / raw)
+  To: buildroot
+
+Compile errors out with:
+./util.c: In function 'decode_wcwidth':
+./util.c:5506:26: error: 'wcwidth' undeclared (first use in this function); did you mean 'mk_wcwidth'?
+ 5506 |             my_wcwidth = wcwidth;
+      |                          ^~~~~~~
+      |                          mk_wcwidth
+./util.c:5506:26: note: each undeclared identifier is reported only once for each function it appears in
+
+uClibc only exposes wcwidth when __USE_XOPEN is defined.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/1c0/1c03a8016d480d9c3fc3112849b1a125df243cab
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/xterm/0001-uClibc-wcwidth.patch | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 package/xterm/0001-uClibc-wcwidth.patch
+
+diff --git a/package/xterm/0001-uClibc-wcwidth.patch b/package/xterm/0001-uClibc-wcwidth.patch
+new file mode 100644
+index 0000000000..ee0416ec78
+--- /dev/null
++++ b/package/xterm/0001-uClibc-wcwidth.patch
+@@ -0,0 +1,13 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: N/A patch sent via email
++diff -Nur xterm-376.orig/util.c xterm-376/util.c
++--- xterm-376.orig/util.c	2022-09-25 19:46:22.000000000 +0200
+++++ xterm-376/util.c	2023-09-03 09:05:36.227133537 +0200
++@@ -69,6 +69,7 @@
++ 
++ #if OPT_WIDE_CHARS
++ #if defined(HAVE_WCHAR_H) && defined(HAVE_WCWIDTH)
+++#define __USE_XOPEN
++ #include <wchar.h>
++ #endif
++ #include <wcwidth.h>
+-- 
+2.39.2
+
