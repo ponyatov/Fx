@@ -171,3 +171,9 @@ fw/pci.ids: $(GZ)/pci-$(IDS_VER).ids.xz
 	xzcat $< > $@
 $(GZ)/pci-$(IDS_VER).ids.xz:
 	$(CURL) $@ https://pci-ids.ucw.cz/v$(IDS_VER)/pci.ids.xz
+
+.PHONY: rootfs
+rootfs:
+	cd $(BR) ; make rootfs-cpio
+	$(MAKE) fw
+
