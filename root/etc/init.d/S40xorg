@@ -14,7 +14,8 @@ XORG_ARGS=":0.0 vt01 -s 0 -noreset -allowMouseOpenFail"
 
 start() {
 	printf "Starting Xorg: "
-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XORG_ARGS
+	# start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XORG_ARGS
+	cd /root ; start-stop-daemon -S -q -b -m -c root -p $PIDFILE --exec $BIN -- $XORG_ARGS
 	[ $? = 0 ] && sleep 3 && echo "OK" || echo "FAIL"
 }
 
