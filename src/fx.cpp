@@ -218,17 +218,20 @@ void audio() {
     Vector *out = new Vector("out");
     a->slot["out"] = out->r();
     //
-    SDL_AudioSpec *spec = nullptr;
+    // SDL_AudioSpec *spec = nullptr;
     std::string name;
     for (auto i = 0; i < SDL_GetNumAudioDevices(false); i++) {
         {
             name = SDL_GetAudioDeviceName(i, false);
-            spec = SDL_GetAudioDeviceSpec(i, false, spec);
+            // spec = SDL_GetAudioDeviceSpec(i, false, spec);
             out->push((new Audio(name))->r());
         }
     }
     for (auto i = 0; i < SDL_GetNumAudioDevices(true); i++) {
-        in->push((new Audio(SDL_GetAudioDeviceName(i, true)))->r());
+        {
+            name = SDL_GetAudioDeviceName(i, true);
+            in->push((new Audio(name))->r());
+        }
     }
 }
 
