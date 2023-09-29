@@ -29,16 +29,21 @@ Object::Object() {
 
 Object::Object(std::string V) : Object() { value = V; }
 
-Object::~Object() { assert(ref == 0); }
+Object::~Object() {}  // assert(ref == 0); }
 
 Object *Object::pool = nullptr;
 
-void Object::push(Object *o) { nest.push_back(o); }
+Object *Object::r() {
+    ref++;
+    return this;
+}
+
+void Object::push(Object *o) { nest.push_back(o->r()); }
 
 void init(int argc, char *argv[]) {  //
-    W["?"] = new Cmd(q, "?");
-    W["argc"] = new Int(argc);
-    Vector *v = new Vector("argv");
+    W["?"] = (new Cmd(q, "?"))->r();
+    W["argc"] = (new Int(argc))->r();
+    Vector *v = static_cast<Vector *>((new Vector("argv"))->r());
     W["argv"] = v;
     v->push(new Str(argv[0]));
 }
@@ -106,13 +111,13 @@ std::string Object::tag() {
 
 std::string Object::val() { return value; }
 
-std::string Object::head() {
-    std::ostringstream os;
-    os << '<' << tag() << ':' << val() << "> @" << this;
+std::string Object::head(std::string prefix) {
+    std::ostringstream os(prefix);
+    os << '<' << tag() << ':' << val() << "> @" << this << " #" << ref;
     return os.str();
 }
 
-void Object::exec() { D.push_back(this); }
+void Object::exec() { D.push_back(this->r()); }
 
 void Cmd::exec() { this->fn(); }
 
@@ -131,16 +136,24 @@ void repl() {
     }
 }
 
+std::string Object::dump(int depth, std::string prefix) {
+    std::ostringstream os;
+    os << std::endl;
+    for (uint i = 0; i < depth; i++) os << '\t';  // tab
+    os << head(prefix);
+    return os.str();
+}
+
 void q() {
     std::ostringstream os;
     //
     os << "\n\nW:";
     for (auto const &[name, word] : W)  //
-        os << "\n\t" << name << " = " << word->head();
+        os << word->dump(1, name + " = ");
     //
     os << "\n\nD:";
     for (auto &d : D)  //
-        os << "\n\t" << d->head();
+        os << d->dump(1);
     //
     os << "\n\n";
     std::cout << os.str();
@@ -150,7 +163,7 @@ void dot() { D.clear(); }
 
 void tick() {
     yylex();
-    D.push_back(yylval.o);
+    D.push_back(yylval.o->r());
 }
 
 Object *pop() {
@@ -180,14 +193,29 @@ void get() {
     delete name;
 }
 
+void audio() {
+    Vector *a = new Vector("audio");
+    assert(a->r());
+    W["audio"] = a;
+    Vector *in = new Vector("in");
+    a->slot["in"] = in->r();
+    // W["audio"]->
+    for (auto iscapture = 0; iscapture <= 1; iscapture++)
+        for (auto i = 0; i < SDL_GetNumAudioDevices(iscapture); i++) {
+            std::cerr << "capture:" << iscapture << " " << i << ": " << '['
+                      << SDL_GetAudioDeviceName(i, iscapture) << ']'
+                      << std::endl;
+        }
+    // halt();
+}
+
 void gui() {
     assert(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO));
     // error(SDL_GetError(), new Cmd(gui, "gui"));
-    W["gui"] = new Win(W["argv"]->nest[0]->value);
+    W["gui"] = (new Win(W["argv"]->nest[0]->value))->r();
     //
-    std::cerr << SDL_GetAudioDeviceName();
-    halt();
-    SDL_OpenAudioDevice();
+    // halt();
+    // SDL_OpenAudioDevice();
 }
 
 GUI::GUI(std::string V) : Object(V) {}

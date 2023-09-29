@@ -31,10 +31,12 @@ struct Object {  /// root executable object
     size_t ref;           //< ref counter
     static Object* pool;  //< global objects pool
     Object* next;         //< next object in @ref pool
+    Object* r();          //< increment ref @returns self
 
     /// @name fields
     std::string value;          //< object name, number/string value
     std::vector<Object*> nest;  //< nested elements = vector = stack = queue
+    std::map<std::string, Object*> slot;  //< map = vocabulary = AST sttributes
 
     /// @name constructor
     Object();
@@ -44,7 +46,11 @@ struct Object {  /// root executable object
     /// @name dump
     virtual std::string tag();
     virtual std::string val();
-    std::string head();
+
+    /// `<T:V>` object header
+    std::string head(std::string prefix = "");
+    /// full text tree dump
+    std::string dump(int depth = 0, std::string prefix = "");
 
     /// @name interpreter/compiler
     virtual void exec();
@@ -141,4 +147,5 @@ struct Win : GUI {
     Win(std::string V);
 };
 
-extern void gui();  //< `( -- )` start GUI window
+extern void gui();    //< `( -- )` start GUI/video
+extern void audio();  //< `( -- )` start audio

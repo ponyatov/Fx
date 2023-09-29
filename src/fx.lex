@@ -22,7 +22,8 @@ n [0-9]+
 "="             CMD(stor,"="   )
 "@"             CMD( get,"@"   )
 
-"gui"           CMD( gui,"gui" )
+"gui"           CMD( gui  ,"gui"   )
+"audio"         CMD( audio,"audio" )
 
 [_a-zA-Z][_a-zA-Z0-9]*  TOKEN(Sym,SYM)  // symbol
 
