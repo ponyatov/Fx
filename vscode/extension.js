@@ -19,6 +19,32 @@ async function activate(context) {
     let disposable = vscode.commands.registerCommand(HELLO, hello);
     context.subscriptions.push(disposable);
     log.appendLine("activate: ok");
+    // 
+    // https://www.toptal.com/javascript/language-server-protocol-tutorial
+    // 
+    const executable = {
+        command: 'blacklist-server',
+        args: ['--stdio'],
+      };
+      const serverOptions = {
+        run: executable,
+        debug: executable,
+      };
+      const clientOptions = {
+        documentSelector: [{
+          scheme: 'file',
+          language: 'plaintext',
+        }],
+      };
+        // 
+      const client = new lsc.LanguageClient(
+        'fx',
+        'fx.lsp',
+        serverOptions,
+        clientOptions
+      );
+      log.appendLine(['client',client]);
+  
 }
 
 function deactivate() {
