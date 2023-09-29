@@ -14,6 +14,7 @@
 #include <readline/history.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_audio.h>
 
 /// @defgroup init init
 /// @{
@@ -140,13 +141,21 @@ extern Object* pop();  //< `( n1 n2 -- n1 )` pop element from @ref D
 extern void push(Object* o);  //< `( -- o )` push element to @ref D
 extern void error(std::string msg, Object* o);  //< raise error
 
-struct GUI : Object {
+struct IO : Object {
+    IO(std::string V);
+};
+
+struct GUI : IO {
     GUI(std::string V);
 };
 
 struct Win : GUI {
     SDL_Window* window = nullptr;
     Win(std::string V);
+};
+
+struct Audio : IO {
+    Audio(std::string V);
 };
 
 extern void gui();    //< `( -- )` start GUI/video

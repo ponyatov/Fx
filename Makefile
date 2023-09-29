@@ -1,6 +1,6 @@
 # var
 MODULE  = $(notdir $(CURDIR))
-OS      = $(shell uname -o | tr '/' '_' )
+OS      = $(shell uname -o | sed 's/GNU\///')
 CORES  ?= $(shell grep processor /proc/cpuinfo | wc -l)
 
 # fw
@@ -79,8 +79,8 @@ install: $(OS)_install
 update:  $(OS)_update
 
 .PHONY: Linux_install Linux_update
-GNU_Linux_install:
-GNU_Linux_update:
+Linux_install:
+Linux_update:
 	sudo apt update
 	sudo apt install -yu `cat apt.$(OS)`
 

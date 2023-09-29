@@ -133,6 +133,10 @@ std::string Object::dump(int depth, std::string prefix) {
     for (auto const &[k, v] : slot)  //
         os << v->dump(depth + 1, k + " = ");
     //
+    size_t idx = 0;
+    for (auto const &i : nest)  //
+        os << i->dump(depth + 1, std::to_string(idx++) + ": ");
+    //
     return os.str();
 }
 
@@ -205,25 +209,31 @@ void get() {
 }
 
 void audio() {
+    assert(!SDL_Init(SDL_INIT_AUDIO));
+    //
     Vector *a = new Vector("audio");
-    assert(a->r());
     W["audio"] = a;
     Vector *in = new Vector("in");
     a->slot["in"] = in->r();
     Vector *out = new Vector("out");
-    a->slot["out"] = in->r();
-    // W["audio"]->
-    for (auto iscapture = 0; iscapture <= 1; iscapture++)
-        for (auto i = 0; i < SDL_GetNumAudioDevices(iscapture); i++) {
-            std::cerr << "capture:" << iscapture << " " << i << ": " << '['
-                      << SDL_GetAudioDeviceName(i, iscapture) << ']'
-                      << std::endl;
+    a->slot["out"] = out->r();
+    //
+    SDL_AudioSpec *spec = nullptr;
+    std::string name;
+    for (auto i = 0; i < SDL_GetNumAudioDevices(false); i++) {
+        {
+            name = SDL_GetAudioDeviceName(i, false);
+            spec = SDL_GetAudioDeviceSpec(i, false, spec);
+            out->push((new Audio(name))->r());
         }
-    // halt();
+    }
+    for (auto i = 0; i < SDL_GetNumAudioDevices(true); i++) {
+        in->push((new Audio(SDL_GetAudioDeviceName(i, true)))->r());
+    }
 }
 
 void gui() {
-    assert(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO));
+    assert(!SDL_Init(SDL_INIT_VIDEO));
     // error(SDL_GetError(), new Cmd(gui, "gui"));
     W["gui"] = (new Win(W["argv"]->nest[0]->value))->r();
     //
@@ -231,7 +241,9 @@ void gui() {
     // SDL_OpenAudioDevice();
 }
 
-GUI::GUI(std::string V) : Object(V) {}
+IO::IO(std::string V) : Object(V) {}
+
+GUI::GUI(std::string V) : IO(V) {}
 
 Win::Win(std::string V) : GUI(V) {
     assert(window = SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,    //
@@ -240,3 +252,5 @@ Win::Win(std::string V) : GUI(V) {
                                      (dynamic_cast<Int *>(W["H"]))->value,  //
                                      SDL_WINDOW_SHOWN));
 }
+
+Audio::Audio(std::string V) : IO(V) {}
