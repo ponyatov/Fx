@@ -210,6 +210,8 @@ void audio() {
     W["audio"] = a;
     Vector *in = new Vector("in");
     a->slot["in"] = in->r();
+    Vector *out = new Vector("out");
+    a->slot["out"] = in->r();
     // W["audio"]->
     for (auto iscapture = 0; iscapture <= 1; iscapture++)
         for (auto i = 0; i < SDL_GetNumAudioDevices(iscapture); i++) {
