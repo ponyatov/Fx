@@ -1,3 +1,6 @@
 #include "fx.hpp"
 
-int main() { return 0; }
+int main(int argc, char *argv[]) {
+    cerr << argv[0] << endl;
+    return 0;
+}

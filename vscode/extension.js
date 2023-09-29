@@ -23,7 +23,7 @@ async function activate(context) {
     // https://www.toptal.com/javascript/language-server-protocol-tutorial
     // 
     const executable = {
-        command: 'blacklist-server',
+        command: 'fx.lsp',
         args: ['--stdio'],
       };
       const serverOptions = {
@@ -38,7 +38,7 @@ async function activate(context) {
       };
         // 
       const client = new lsc.LanguageClient(
-        'fx',
+        'fx.py',
         'fx.lsp',
         serverOptions,
         clientOptions
