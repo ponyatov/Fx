@@ -33,7 +33,7 @@ async function activate(context) {
       const clientOptions = {
         documentSelector: [{
           scheme: 'file',
-          language: 'plaintext',
+          language: 'fx',//'plaintext',
         }],
       };
         // 
@@ -44,7 +44,7 @@ async function activate(context) {
         clientOptions
       );
       log.appendLine(['client',client]);
-  
+      client.start();
 }
 
 function deactivate() {
