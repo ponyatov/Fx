@@ -112,8 +112,27 @@ std::string Object::tag() {
 std::string Object::val() { return value; }
 
 std::string Object::head(std::string prefix) {
-    std::ostringstream os(prefix);
-    os << '<' << tag() << ':' << val() << "> @" << this << " #" << ref;
+    std::ostringstream os;
+    os << prefix << '<' << tag() << ':' << val() << "> @" << this << " #"
+       << ref;
+    return os.str();
+}
+
+std::string Object::pad(int depth) {
+    std::ostringstream os;
+    os << std::endl;
+    for (uint i = 0; i < depth; i++) os << '\t';  // tab
+    return os.str();
+}
+
+std::string Object::dump(int depth, std::string prefix) {
+    std::ostringstream os;
+    // head
+    os << pad(depth) << head(prefix);
+    // slot{}s
+    for (auto const &[k, v] : slot)  //
+        os << v->dump(depth + 1, k + " = ");
+    //
     return os.str();
 }
 
@@ -134,14 +153,6 @@ void repl() {
             line = nullptr;
         }
     }
-}
-
-std::string Object::dump(int depth, std::string prefix) {
-    std::ostringstream os;
-    os << std::endl;
-    for (uint i = 0; i < depth; i++) os << '\t';  // tab
-    os << head(prefix);
-    return os.str();
 }
 
 void q() {

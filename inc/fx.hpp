@@ -51,6 +51,8 @@ struct Object {  /// root executable object
     std::string head(std::string prefix = "");
     /// full text tree dump
     std::string dump(int depth = 0, std::string prefix = "");
+    /// @ref dump tree padding
+    static std::string pad(int depth);
 
     /// @name interpreter/compiler
     virtual void exec();
