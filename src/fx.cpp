@@ -40,11 +40,18 @@ Object *Object::r() {
 
 void Object::push(Object *o) { nest.push_back(o->r()); }
 
+Object *Object::pop() {
+    Object *o = nest.back();
+    assert(o);
+    nest.pop_back();
+    return o;
+}
+
 void init(int argc, char *argv[]) {  //
-    W["?"] = (new Cmd(q, "?"))->r();
-    W["argc"] = (new Int(argc))->r();
+    vm.slot["?"] = (new Cmd(q, "?"))->r();
+    vm.slot["argc"] = (new Int(argc))->r();
     Vector *v = static_cast<Vector *>((new Vector("argv"))->r());
-    W["argv"] = v;
+    vm.slot["argv"] = v;
     v->push(new Str(argv[0]));
 }
 
@@ -73,7 +80,7 @@ void error(std::string msg, Object *o) {
 }
 
 void Sym::exec() {
-    Object *o = W[value];
+    Object *o = vm.slot[value];
     if (!o) {
         error("unknown", this);
     } else
@@ -97,6 +104,10 @@ Vector::Vector(std::string V) : Container(V) {}
 
 Active::Active() : Object() {}
 Active::Active(std::string V) : Object(V) {}
+
+VM::VM(std::string V) : Active(V) {}
+
+VM vm("init");
 
 Cmd::Cmd(void (*F)(), std::string V) : Active(V) { fn = F; }
 
@@ -140,7 +151,7 @@ std::string Object::dump(int depth, std::string prefix) {
     return os.str();
 }
 
-void Object::exec() { D.push_back(this->r()); }
+void Object::exec() { vm.push(this); }
 
 void Cmd::exec() { this->fn(); }
 
@@ -159,60 +170,43 @@ void repl() {
     }
 }
 
-void q() {
-    std::ostringstream os;
-    //
-    os << "\n\nW:";
-    for (auto const &[name, word] : W)  //
-        os << word->dump(1, name + " = ");
-    //
-    os << "\n\nD:";
-    for (auto &d : D)  //
-        os << d->dump(1);
-    //
-    os << "\n\n";
-    std::cout << os.str();
-}
+void q() { std::cout << vm.dump() << std::endl; }
 
-void dot() { D.clear(); }
+void Object::dot() { nest.clear(); }
+void dot() { vm.dot(); }
 
 void tick() {
-    yylex();
-    D.push_back(yylval.o->r());
-}
-
-Object *pop() {
-    assert(!D.empty());
-    Object *o = D.back();
-    D.pop_back();
-    return o;
-}
-
-void push(Object *o) {
-    D.push_back(o);
-    o->ref++;
+    assert(yylex() == SYM);
+    vm.push(yylval.o);
 }
 
 void stor() {
-    Object *name = pop();
-    Object *o = pop();
-    W[name->value] = o;
-    delete name;
+    Object *name = vm.pop();
+    assert(name);
+    Object *o = vm.pop();
+    assert(o);
+    o->slot[name->val()] = o;
 }
 
 void get() {
-    Object *name = pop();
-    Object *o = W[name->value];
+    Object *name = vm.pop();
+    Object *o = vm.slot[name->val()];
     assert(o);
-    push(o);
+    vm.push(o);
     delete name;
+}
+
+void sub() {
+    assert(yylex() == SYM);
+    std::string idx = yylval.o->val();
+    q();
 }
 
 void audio() {
     assert(!SDL_Init(SDL_INIT_AUDIO));
     //
     Vector *a = new Vector("audio");
-    W["audio"] = a;
+    vm.nest["sound"] = a;
     Vector *in = new Vector("in");
     a->slot["in"] = in->r();
     Vector *out = new Vector("out");

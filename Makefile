@@ -72,6 +72,11 @@ tmp/$(MODULE).parser.cpp: src/$(MODULE).yacc
 fw/%: $(BR)/output/images/%
 	cp $< $@
 
+# doc
+.PHONY: doxygen
+doxy: .doxygen
+	rm -rf docs ; doxygen $< 1>/dev/null
+
 # install
 .PHONY: install update
 install: $(OS)_install

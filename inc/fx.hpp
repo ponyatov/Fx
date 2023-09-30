@@ -17,27 +17,36 @@
 #include <SDL2/SDL_audio.h>
 
 /// @defgroup init init
+/// @brief system init
 /// @{
 
-extern int main(int argc, char* argv[]);   //< program entry
-extern void arg(int argc, char* argv);     //< print cmdline arg
-extern void init(int argc, char* argv[]);  //< initizalize
-extern int fini(int err = 0);              //< system stop (finalize)
+extern int main(int argc, char* argv[]);   ///< program entry
+extern void arg(int argc, char* argv);     ///< print cmdline args
+extern void init(int argc, char* argv[]);  ///< initizalize
+extern int fini(int err = 0);              ///< system stop (finalize)
 
 /// @}
 
-struct Object {  /// root executable object
+/// @defgroup core core
+/// @brief Executable Data Structures (c)
 
+/// @ingroup core
+/// @brief root executable object
+struct Object {
     /// @name garbage collector
-    size_t ref;           //< ref counter
-    static Object* pool;  //< global objects pool
-    Object* next;         //< next object in @ref pool
-    Object* r();          //< increment ref @returns self
+    size_t ref;           ///< ref counter
+    static Object* pool;  ///< global objects pool
+    Object* next;         ///< next object in @ref pool
+    Object* r();          ///< increment ref @returns self
 
     /// @name fields
-    std::string value;          //< object name, number/string value
-    std::vector<Object*> nest;  //< nested elements = vector = stack = queue
-    std::map<std::string, Object*> slot;  //< map = vocabulary = AST sttributes
+    std::string value;  ///< object name, number/string value
+
+    /// nested & ordered elements = vector = stack= queue = AST subtree
+    std::vector<Object*> nest;
+
+    /// string-associative array = map = vocabulary = AST attributes
+    std::map<std::string, Object*> slot;
 
     /// @name constructor
     Object();
@@ -45,7 +54,9 @@ struct Object {  /// root executable object
     virtual ~Object();
 
     /// @name dump
+    /// type/class name (lowercased)
     virtual std::string tag();
+    /// get value / stringify
     virtual std::string val();
 
     /// `<T:V>` object header
@@ -56,27 +67,39 @@ struct Object {  /// root executable object
     static std::string pad(int depth);
 
     /// @name interpreter/compiler
-    virtual void exec();
+    virtual void exec();  ///< execute object in @ref vm global context
 
     /// @name stack ops
-    void push(Object* o);  //< push to @ref nest
-    Object* pop();         //< pop from @ref nest as a stack
+    void dot();            ///< `( ... )` clear @ref nest
+    void push(Object* o);  ///< `( -- o )` push to @ref nest
+    Object* pop();         ///< `( o -- )` pop from @ref nest
 };
 
+/// @defgroup prim primitive
+/// @ingroup core
+/// @brief scalar and atomic values
+
+/// @ingroup prim
 struct Primitive : Object {
     Primitive();
     Primitive(std::string V);
 };
 
+/// @ingroup prim
+/// @brief symbol
 struct Sym : Primitive {
     Sym(std::string V);
     void exec();
 };
 
+/// @ingroup prim
+/// @brief text string
 struct Str : Primitive {
     Str(std::string V);
 };
 
+/// @ingroup prim
+/// @brief integer number
 struct Int : Primitive {
     int value;
     std::string val();
@@ -84,37 +107,57 @@ struct Int : Primitive {
     Int(int N);
 };
 
+/// @defgroup cont container
+/// @ingroup core
+/// @brief data containers
+
+/// @ingroup cont
 struct Container : Object {
     Container();
     Container(std::string V);
 };
 
+/// @ingroup cont
 struct Vector : Container {
     Vector();
     Vector(std::string V);
 };
 
+/// @defgroup active active
+/// @ingroup core
+/// @brief executable active data
+
+/// @ingroup active
 struct Active : Object {
     Active();
     Active(std::string V);
 };
 
+/// @ingroup active
+struct VM : Active {
+    VM(std::string V);
+};
+
+/// @ingroup active
+extern VM vm;  ///< global @ref VM: vocabulary & data stack
+
+/// @ingroup active
 struct Cmd : Active {
     void (*fn)();
     Cmd(void (*F)(), std::string V);
     void exec();
 };
 
-extern std::map<std::string, Object*> W;  //< vocabulary
-extern std::vector<Object*> D;            //< data stack
-
-extern int yylex();                    //< lexer
-extern int yylineno;                   //< current line
-extern char* yytext;                   //< lexemet: token value
-extern FILE* yyin;                     //< current script file
-extern char* yyfile;                   //< current file name
-extern void yyerror(std::string msg);  //< syntax error callback
-extern int yyparse();                  //< syntax parser
+/// @defgroup skelex skelex
+/// @brief lexical skeleton: syntax parser
+/// @{
+extern int yylex();                    ///< lexer
+extern int yylineno;                   ///< current line
+extern char* yytext;                   ///< lexemet: token value
+extern FILE* yyin;                     ///< current script file
+extern char* yyfile;                   ///< current file name
+extern void yyerror(std::string msg);  ///< syntax error callback
+extern int yyparse();                  ///< syntax parser
 #include "fx.parser.hpp"
 
 #define TOKEN(C, X)               \
@@ -128,18 +171,18 @@ extern int yyparse();                  //< syntax parser
         yylval.o = new Cmd(F, V); \
         return CMD;               \
     }
+/// @}
 
-extern void nop();     //< `( -- )` empty command
-extern void halt();    //< `( -- )` stop system
-extern void repl();    //< `( -- )` start interactive REPL console
-extern void q();       //< `( -- )` debug dump: @ref D & @ref W
-extern void dot();     //< `( ... -- )` clean @ref D
-extern void tick();    //< `( -- token )` parse next token into stack
-extern void stor();    //< `( o name -- )` store o into @ref W with `name`
-extern void get();     //< `( name -- o )` get object from @ref @ by `name`
-extern Object* pop();  //< `( n1 n2 -- n1 )` pop element from @ref D
-extern void push(Object* o);  //< `( -- o )` push element to @ref D
-extern void error(std::string msg, Object* o);  //< raise error
+extern void nop();   ///< `( -- )` empty command
+extern void halt();  ///< `( -- )` stop system
+extern void repl();  ///< `( -- )` start interactive REPL console
+extern void q();     ///< `( -- )` debug dump: @ref D & @ref W
+extern void dot();   ///< `( ... -- )` clean @ref D
+extern void tick();  ///< `( -- token )` parse next token into stack
+extern void stor();  ///< `( o name -- )` store o into @ref W with `name`
+extern void get();   ///< `( name -- o )` get object from @ref @ by `name`
+extern void sub();   //> `( o -- o/element )` get slot by it's `.name`
+extern void error(std::string msg, Object* o);  ///< raise error
 
 struct IO : Object {
     IO(std::string V);
@@ -158,5 +201,5 @@ struct Audio : IO {
     Audio(std::string V);
 };
 
-extern void gui();    //< `( -- )` start GUI/video
-extern void audio();  //< `( -- )` start audio
+extern void gui();    ///< `( -- )` start GUI/video
+extern void audio();  ///< `( -- )` start audio

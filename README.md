@@ -1,5 +1,5 @@
 # `fx`
-## FORTH-like graphical & game script language
+## FORTH-like multimedia & game script language/engine
 
 (c) Dmitry Ponyatov <<dponyatov@gmail.com>> 2023 MIT
 

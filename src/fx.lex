@@ -21,6 +21,7 @@ n [0-9]+
 "`"             CMD(tick,"`"   )
 "="             CMD(stor,"="   )
 "@"             CMD( get,"@"   )
+"/"             CMD( sub,"/"   )
 
 "gui"           CMD( gui  ,"gui"   )
 "audio"         CMD( audio,"audio" )
