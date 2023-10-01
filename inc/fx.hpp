@@ -127,6 +127,18 @@ struct Vector : Container {
     Vector(std::string V);
 };
 
+/// @ingroup cont
+struct Stack : Container {
+    Stack();
+    Stack(std::string V);
+};
+
+/// @ingroup cont
+struct Map : Container {
+    Map();
+    Map(std::string V);
+};
+
 /// @defgroup active active
 /// @ingroup core
 /// @brief executable active data

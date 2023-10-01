@@ -154,6 +154,8 @@ void Cmd::exec() { this->fn(); }
 
 void repl() {
     static char *line = nullptr;
+    // rl_getc_function = getc;
+    // rl_catch_signals = true;
     while (true) {
         line = readline("> ");
         if (!line) q();
