@@ -5,7 +5,7 @@ CORES  ?= $(shell grep processor /proc/cpuinfo | wc -l)
 
 # fw
 APP ?= $(MODULE)
-HW  ?= qemu686
+HW  ?= qemu64
 
 include hw/$(HW).mk
 include cpu/$(CPU).mk

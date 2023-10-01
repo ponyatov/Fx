@@ -26,6 +26,9 @@ n [0-9]+
 "gui"           CMD( gui  ,"gui"   )
 "sound"         CMD( sound,"sound" )
 
+"open"          CMD( open,"open"   )
+"close"         CMD( close,"close" )
+
 [_a-zA-Z][_a-zA-Z0-9]*  TOKEN(Sym,SYM)  // symbol
 
 .               {yyerror("");}          // any undetected char

@@ -1,0 +1,2 @@
+ARCH = amd64
+QEMU_CFG += -m 128M
