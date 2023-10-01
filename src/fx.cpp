@@ -223,7 +223,6 @@ void dot() {
         default:
             abort();
     }
-    q();
 }
 
 void sound() {
@@ -242,13 +241,13 @@ void sound() {
         {
             name = SDL_GetAudioDeviceName(i, false);
             // spec = SDL_GetAudioDeviceSpec(i, false, spec);
-            out->push((new Audio(name))->r());
+            out->push((new AuDev(name))->r());
         }
     }
     for (auto i = 0; i < SDL_GetNumAudioDevices(true); i++) {
         {
             name = SDL_GetAudioDeviceName(i, true);
-            in->push((new Audio(name))->r());
+            in->push((new AuDev(name))->r());
         }
     }
 }
@@ -273,3 +272,27 @@ Win::Win(std::string V) : GUI(V) {
 }
 
 Audio::Audio(std::string V) : IO(V) {}
+AuDev::AuDev(std::string V) : Audio(V) {}
+
+void IO::open() {}
+void IO::close() {}
+
+void open() { dynamic_cast<IO *>(vm.pop())->open(); }
+void close() { dynamic_cast<IO *>(vm.pop())->close(); }
+
+void AuDev::open() {  //
+    std::cerr << head("\n\nopening ") << std::endl;
+    SDL_AudioSpec desired, obtained;
+    //
+    SDL_memset(&desired, 0, sizeof(desired));
+    desired.freq = 48000;
+    //
+    SDL_AudioDeviceID id =
+        SDL_OpenAudioDevice(value.c_str(), 0, &desired, &obtained, 0);
+    if (!id) {
+        std::cerr << SDL_GetError() << std::endl;
+        abort();
+    }
+    slot["id"] = new Int(id);
+    slot["freq"] = new Int(obtained.freq);
+}

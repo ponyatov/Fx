@@ -177,6 +177,8 @@ extern int yyparse();                  ///< syntax parser
     }
 /// @}
 
+/// @defgroup cmd @ref VM commands
+/// @{
 extern void nop();    ///< `( -- )` empty command
 extern void halt();   ///< `( -- )` stop system
 extern void repl();   ///< `( -- )` start interactive REPL console
@@ -190,22 +192,48 @@ extern void error(std::string msg, Object* o);  ///< raise error
 
 extern void open();   ///< `( stream -- )` open stream/device
 extern void close();  ///< `( stream -- )` close stream
+/// @}
 
+/// @defgroup io io
+/// @ingroup core
+/// @brief misc input/output
+
+/// @ingroup io
 struct IO : Object {
     IO(std::string V);
+    virtual void open();
+    virtual void close();
 };
 
+/// @defgroup gui gui
+/// @ingroup io
+/// @brief graphics/GUI
+
+/// @ingroup gui
 struct GUI : IO {
     GUI(std::string V);
 };
 
+/// @ingroup gui
 struct Win : GUI {
     SDL_Window* window = nullptr;
     Win(std::string V);
 };
 
+/// @defgroup audio audio
+/// @ingroup io
+/// @brief audio & digital signal procesing
+
+/// @ingroup audio
 struct Audio : IO {
     Audio(std::string V);
+};
+
+/// @ingroup audio
+/// @brief audio device
+struct AuDev : Audio {
+    AuDev(std::string V);
+    void open();  ///< `SDL_OpenAudioDevice`
 };
 
 extern void gui();    ///< `( -- )` start GUI/video
