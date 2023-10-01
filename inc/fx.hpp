@@ -143,7 +143,7 @@ struct VM : Active {
 };
 
 /// @ingroup active
-extern VM vm;  ///< global @ref VM: vocabulary & data stack
+extern VM vm;  ///< global VM: vocabulary & data stack
 
 /// @ingroup active
 struct Cmd : Active {
@@ -180,13 +180,16 @@ extern int yyparse();                  ///< syntax parser
 extern void nop();    ///< `( -- )` empty command
 extern void halt();   ///< `( -- )` stop system
 extern void repl();   ///< `( -- )` start interactive REPL console
-extern void q();      ///< `( -- )` debug dump: @ref D & @ref W
-extern void clean();  ///< `( ... -- )` clean @ref D
+extern void q();      ///< `( -- )` debug dump: @ref vm
+extern void clean();  ///< `( ... -- )` clean @ref vm stack
 extern void tick();   ///< `( -- token )` parse next token into stack
-extern void stor();   ///< `( o name -- )` store o into @ref W with `name`
-extern void get();    ///< `( name -- o )` get object from @ref @ by `name`
+extern void stor();   ///< `( o name -- )` store o into @ref vm with `name`
+extern void get();    ///< `( name -- o )` get object from @ref vm @ by `name`
 extern void dot();    ///< `( o -- o.element )` get slot by it's `.name`
 extern void error(std::string msg, Object* o);  ///< raise error
+
+extern void open();   ///< `( stream -- )` open stream/device
+extern void close();  ///< `( stream -- )` close stream
 
 struct IO : Object {
     IO(std::string V);
