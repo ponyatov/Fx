@@ -111,9 +111,6 @@ VM vm("init");
 
 Cmd::Cmd(void (*F)(), std::string V) : Active(V) { fn = F; }
 
-std::map<std::string, Object *> W;
-std::vector<Object *> D;
-
 std::string Object::tag() {
     std::string ret(abi::__cxa_demangle(typeid(*this).name(), 0, 0, nullptr));
     for (auto &ch : ret) ch = tolower(ch);
@@ -172,8 +169,8 @@ void repl() {
 
 void q() { std::cout << vm.dump() << std::endl; }
 
-void Object::dot() { nest.clear(); }
-void dot() { vm.dot(); }
+void Object::clean() { nest.clear(); }
+void clean() { vm.clean(); }
 
 void tick() {
     assert(yylex() == SYM);
@@ -185,7 +182,20 @@ void stor() {
     assert(name);
     Object *o = vm.pop();
     assert(o);
-    o->slot[name->val()] = o;
+    vm.slot[name->val()] = o;
+}
+
+Object *Object::get(std::string idx) {
+    Object *o = slot[idx];
+    assert(o);
+    return o;
+}
+
+Object *Object::get(int idx) {
+    assert(idx < nest.size());
+    Object *o = nest[idx];
+    assert(o);
+    return o;
 }
 
 void get() {
@@ -196,17 +206,31 @@ void get() {
     delete name;
 }
 
-void sub() {
-    assert(yylex() == SYM);
-    std::string idx = yylval.o->val();
+void dot() {
+    // operand
+    Object *o = vm.pop();
+    assert(o);
+    // index
+    auto type = yylex();
+    // type selector
+    switch (type) {
+        case SYM:
+            vm.push(o->get(yylval.o->val()));
+            break;
+        case INT:
+            vm.push(o->get(dynamic_cast<Int *>(yylval.o)->value));
+            break;
+        default:
+            abort();
+    }
     q();
 }
 
-void audio() {
+void sound() {
     assert(!SDL_Init(SDL_INIT_AUDIO));
     //
     Vector *a = new Vector("audio");
-    vm.nest["sound"] = a;
+    vm.slot["audio"] = a;
     Vector *in = new Vector("in");
     a->slot["in"] = in->r();
     Vector *out = new Vector("out");
@@ -232,10 +256,7 @@ void audio() {
 void gui() {
     assert(!SDL_Init(SDL_INIT_VIDEO));
     // error(SDL_GetError(), new Cmd(gui, "gui"));
-    W["gui"] = (new Win(W["argv"]->nest[0]->value))->r();
-    //
-    // halt();
-    // SDL_OpenAudioDevice();
+    // vm.slot["gui"] = (new Win(vm.slot["argv"]->nest[0]->value))->r();
 }
 
 IO::IO(std::string V) : Object(V) {}
@@ -243,11 +264,12 @@ IO::IO(std::string V) : Object(V) {}
 GUI::GUI(std::string V) : IO(V) {}
 
 Win::Win(std::string V) : GUI(V) {
-    assert(window = SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,    //
-                                     SDL_WINDOWPOS_UNDEFINED,               //
-                                     (dynamic_cast<Int *>(W["W"]))->value,  //
-                                     (dynamic_cast<Int *>(W["H"]))->value,  //
-                                     SDL_WINDOW_SHOWN));
+    assert(window =
+               SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,          //
+                                SDL_WINDOWPOS_UNDEFINED,                     //
+                                (dynamic_cast<Int *>(vm.slot["W"]))->value,  //
+                                (dynamic_cast<Int *>(vm.slot["H"]))->value,  //
+                                SDL_WINDOW_SHOWN));
 }
 
 Audio::Audio(std::string V) : IO(V) {}

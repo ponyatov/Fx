@@ -70,9 +70,13 @@ struct Object {
     virtual void exec();  ///< execute object in @ref vm global context
 
     /// @name stack ops
-    void dot();            ///< `( ... )` clear @ref nest
+    void clean();          ///< `( ... )` clean @ref nest
     void push(Object* o);  ///< `( -- o )` push to @ref nest
     Object* pop();         ///< `( o -- )` pop from @ref nest
+
+    /// @name slot ops
+    Object* get(std::string idx);  ///< get slot by its `.name`
+    Object* get(int idx);          ///< get nest by index
 };
 
 /// @defgroup prim primitive
@@ -173,15 +177,15 @@ extern int yyparse();                  ///< syntax parser
     }
 /// @}
 
-extern void nop();   ///< `( -- )` empty command
-extern void halt();  ///< `( -- )` stop system
-extern void repl();  ///< `( -- )` start interactive REPL console
-extern void q();     ///< `( -- )` debug dump: @ref D & @ref W
-extern void dot();   ///< `( ... -- )` clean @ref D
-extern void tick();  ///< `( -- token )` parse next token into stack
-extern void stor();  ///< `( o name -- )` store o into @ref W with `name`
-extern void get();   ///< `( name -- o )` get object from @ref @ by `name`
-extern void sub();   //> `( o -- o/element )` get slot by it's `.name`
+extern void nop();    ///< `( -- )` empty command
+extern void halt();   ///< `( -- )` stop system
+extern void repl();   ///< `( -- )` start interactive REPL console
+extern void q();      ///< `( -- )` debug dump: @ref D & @ref W
+extern void clean();  ///< `( ... -- )` clean @ref D
+extern void tick();   ///< `( -- token )` parse next token into stack
+extern void stor();   ///< `( o name -- )` store o into @ref W with `name`
+extern void get();    ///< `( name -- o )` get object from @ref @ by `name`
+extern void dot();    ///< `( o -- o.element )` get slot by it's `.name`
 extern void error(std::string msg, Object* o);  ///< raise error
 
 struct IO : Object {
@@ -202,4 +206,4 @@ struct Audio : IO {
 };
 
 extern void gui();    ///< `( -- )` start GUI/video
-extern void audio();  ///< `( -- )` start audio
+extern void sound();  ///< `( -- )` start audio
