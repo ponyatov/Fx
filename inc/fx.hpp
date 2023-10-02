@@ -224,11 +224,14 @@ extern void over();   ///< `( a b -- a b a )` flop over
 extern void clean();  ///< `( ... -- )` clean @ref vm stack
 /// @}
 
+/// @defgroup media media
+/// @{
 extern void open();    ///< `( stream -- )` open stream/device
 extern void close();   ///< `( stream -- )` close stream
 extern void play();    ///< `( dev -- )`
 extern void _pause();  ///< `( dev -- )`
 extern void stop();    ///< `( dev -- )`
+/// @}
 /// @}
 
 /// @defgroup io io

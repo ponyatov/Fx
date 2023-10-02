@@ -346,6 +346,9 @@ void swap() {
 void over() { abort(); }
 
 void play() { dynamic_cast<AuDev *>(vm.pop())->play(); }
+void stop() { dynamic_cast<AuDev *>(vm.pop())->stop(); }
+
+void _pause() { stop(); }
 
 void AuDev::play() {
     assert(id);
@@ -356,7 +359,3 @@ void AuDev::stop() {
     assert(id);
     SDL_PauseAudioDevice(id, true);
 }
-
-void _pause() {}
-
-void stop() {}
