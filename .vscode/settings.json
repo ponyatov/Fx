@@ -3,15 +3,16 @@
         { "command": "multiCommand.f11",
             "sequence": [ "workbench.action.files.saveAll",
                 { "command": "workbench.action.terminal.sendSequence",
-                    "args": {"text": "\u000D clear ; LANG=C make br \u000D"}}]},
+                    "args": {"text": "\u000D clear ; LANG=C make doxy \u000D"}}]},
         { "command": "multiCommand.f12",
             "sequence": [ "workbench.action.files.saveAll",
                 { "command": "workbench.action.terminal.sendSequence",
                     "args": {"text": "\u000D clear ; LANG=C make all \u000D"}}]}
     ],
 
-    "files.exclude":{
     // files
+    "files.exclude":{
+        "docs/**": true,
         "buildroot-**": true,
         "syslinux-**": true,
     },

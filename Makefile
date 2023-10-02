@@ -5,7 +5,7 @@ CORES  ?= $(shell grep processor /proc/cpuinfo | wc -l)
 
 # fw
 APP ?= $(MODULE)
-HW  ?= qemu686
+HW  ?= qemu64
 
 include hw/$(HW).mk
 include cpu/$(CPU).mk
@@ -71,6 +71,11 @@ tmp/$(MODULE).parser.cpp: src/$(MODULE).yacc
 
 fw/%: $(BR)/output/images/%
 	cp $< $@
+
+# doc
+.PHONY: doxygen
+doxy: .doxygen
+	rm -rf docs ; doxygen $< 1>/dev/null
 
 # install
 .PHONY: install update

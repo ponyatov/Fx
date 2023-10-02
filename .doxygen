@@ -1,0 +1,17 @@
+PROJECT_NAME           = "fx"
+PROJECT_BRIEF          = "FORTH-like multimedia & game script language/engine"
+PROJECT_LOGO           = doc/logo.png
+HTML_OUTPUT            = docs
+OUTPUT_DIRECTORY       =
+INPUT                  = README.md doc src inc
+EXCLUDE                = doc/meta src/*-*
+WARN_IF_UNDOCUMENTED   = NO
+RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+GENERATE_LATEX         = NO
+#FILE_PATTERNS         += *.lex *.yacc
+EXTENSION_MAPPING      = lex=C++ yacc=C++ ino=C++
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+LAYOUT_FILE            = doc/DoxygenLayout.xml
+SORT_GROUP_NAMES       = YES

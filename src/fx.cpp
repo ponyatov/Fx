@@ -40,11 +40,18 @@ Object *Object::r() {
 
 void Object::push(Object *o) { nest.push_back(o->r()); }
 
+Object *Object::pop() {
+    Object *o = nest.back();
+    assert(o);
+    nest.pop_back();
+    return o;
+}
+
 void init(int argc, char *argv[]) {  //
-    W["?"] = (new Cmd(q, "?"))->r();
-    W["argc"] = (new Int(argc))->r();
+    vm.slot["?"] = (new Cmd(q, "?"))->r();
+    vm.slot["argc"] = (new Int(argc))->r();
     Vector *v = static_cast<Vector *>((new Vector("argv"))->r());
-    W["argv"] = v;
+    vm.slot["argv"] = v;
     v->push(new Str(argv[0]));
 }
 
@@ -73,7 +80,7 @@ void error(std::string msg, Object *o) {
 }
 
 void Sym::exec() {
-    Object *o = W[value];
+    Object *o = vm.slot[value];
     if (!o) {
         error("unknown", this);
     } else
@@ -98,10 +105,11 @@ Vector::Vector(std::string V) : Container(V) {}
 Active::Active() : Object() {}
 Active::Active(std::string V) : Object(V) {}
 
-Cmd::Cmd(void (*F)(), std::string V) : Active(V) { fn = F; }
+VM::VM(std::string V) : Active(V) {}
 
-std::map<std::string, Object *> W;
-std::vector<Object *> D;
+VM vm("init");
+
+Cmd::Cmd(void (*F)(), std::string V) : Active(V) { fn = F; }
 
 std::string Object::tag() {
     std::string ret(abi::__cxa_demangle(typeid(*this).name(), 0, 0, nullptr));
@@ -140,12 +148,14 @@ std::string Object::dump(int depth, std::string prefix) {
     return os.str();
 }
 
-void Object::exec() { D.push_back(this->r()); }
+void Object::exec() { vm.push(this); }
 
 void Cmd::exec() { this->fn(); }
 
 void repl() {
     static char *line = nullptr;
+    // rl_getc_function = getc;
+    // rl_catch_signals = true;
     while (true) {
         line = readline("> ");
         if (!line) q();
@@ -159,60 +169,69 @@ void repl() {
     }
 }
 
-void q() {
-    std::ostringstream os;
-    //
-    os << "\n\nW:";
-    for (auto const &[name, word] : W)  //
-        os << word->dump(1, name + " = ");
-    //
-    os << "\n\nD:";
-    for (auto &d : D)  //
-        os << d->dump(1);
-    //
-    os << "\n\n";
-    std::cout << os.str();
-}
+void q() { std::cout << vm.dump() << std::endl; }
 
-void dot() { D.clear(); }
+void Object::clean() { nest.clear(); }
+void clean() { vm.clean(); }
 
 void tick() {
-    yylex();
-    D.push_back(yylval.o->r());
-}
-
-Object *pop() {
-    assert(!D.empty());
-    Object *o = D.back();
-    D.pop_back();
-    return o;
-}
-
-void push(Object *o) {
-    D.push_back(o);
-    o->ref++;
+    assert(yylex() == SYM);
+    vm.push(yylval.o);
 }
 
 void stor() {
-    Object *name = pop();
-    Object *o = pop();
-    W[name->value] = o;
-    delete name;
+    Object *name = vm.pop();
+    assert(name);
+    Object *o = vm.pop();
+    assert(o);
+    vm.slot[name->val()] = o;
+}
+
+Object *Object::get(std::string idx) {
+    Object *o = slot[idx];
+    assert(o);
+    return o;
+}
+
+Object *Object::get(int idx) {
+    assert(idx < nest.size());
+    Object *o = nest[idx];
+    assert(o);
+    return o;
 }
 
 void get() {
-    Object *name = pop();
-    Object *o = W[name->value];
+    Object *name = vm.pop();
+    Object *o = vm.slot[name->val()];
     assert(o);
-    push(o);
+    vm.push(o);
     delete name;
 }
 
-void audio() {
+void dot() {
+    // operand
+    Object *o = vm.pop();
+    assert(o);
+    // index
+    auto type = yylex();
+    // type selector
+    switch (type) {
+        case SYM:
+            vm.push(o->get(yylval.o->val()));
+            break;
+        case INT:
+            vm.push(o->get(dynamic_cast<Int *>(yylval.o)->value));
+            break;
+        default:
+            abort();
+    }
+}
+
+void sound() {
     assert(!SDL_Init(SDL_INIT_AUDIO));
     //
     Vector *a = new Vector("audio");
-    W["audio"] = a;
+    vm.slot["audio"] = a;
     Vector *in = new Vector("in");
     a->slot["in"] = in->r();
     Vector *out = new Vector("out");
@@ -224,13 +243,13 @@ void audio() {
         {
             name = SDL_GetAudioDeviceName(i, false);
             // spec = SDL_GetAudioDeviceSpec(i, false, spec);
-            out->push((new Audio(name))->r());
+            out->push((new AuDev(name))->r());
         }
     }
     for (auto i = 0; i < SDL_GetNumAudioDevices(true); i++) {
         {
             name = SDL_GetAudioDeviceName(i, true);
-            in->push((new Audio(name))->r());
+            in->push((new AuDev(name))->r());
         }
     }
 }
@@ -238,10 +257,7 @@ void audio() {
 void gui() {
     assert(!SDL_Init(SDL_INIT_VIDEO));
     // error(SDL_GetError(), new Cmd(gui, "gui"));
-    W["gui"] = (new Win(W["argv"]->nest[0]->value))->r();
-    //
-    // halt();
-    // SDL_OpenAudioDevice();
+    // vm.slot["gui"] = (new Win(vm.slot["argv"]->nest[0]->value))->r();
 }
 
 IO::IO(std::string V) : Object(V) {}
@@ -249,11 +265,36 @@ IO::IO(std::string V) : Object(V) {}
 GUI::GUI(std::string V) : IO(V) {}
 
 Win::Win(std::string V) : GUI(V) {
-    assert(window = SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,    //
-                                     SDL_WINDOWPOS_UNDEFINED,               //
-                                     (dynamic_cast<Int *>(W["W"]))->value,  //
-                                     (dynamic_cast<Int *>(W["H"]))->value,  //
-                                     SDL_WINDOW_SHOWN));
+    assert(window =
+               SDL_CreateWindow(V.c_str(), SDL_WINDOWPOS_UNDEFINED,          //
+                                SDL_WINDOWPOS_UNDEFINED,                     //
+                                (dynamic_cast<Int *>(vm.slot["W"]))->value,  //
+                                (dynamic_cast<Int *>(vm.slot["H"]))->value,  //
+                                SDL_WINDOW_SHOWN));
 }
 
 Audio::Audio(std::string V) : IO(V) {}
+AuDev::AuDev(std::string V) : Audio(V) {}
+
+void IO::open() {}
+void IO::close() {}
+
+void open() { dynamic_cast<IO *>(vm.pop())->open(); }
+void close() { dynamic_cast<IO *>(vm.pop())->close(); }
+
+void AuDev::open() {  //
+    std::cerr << head("\n\nopening ") << std::endl;
+    SDL_AudioSpec desired, obtained;
+    //
+    SDL_memset(&desired, 0, sizeof(desired));
+    desired.freq = 48000;
+    //
+    SDL_AudioDeviceID id =
+        SDL_OpenAudioDevice(value.c_str(), 0, &desired, &obtained, 0);
+    if (!id) {
+        std::cerr << SDL_GetError() << std::endl;
+        abort();
+    }
+    slot["id"] = new Int(id);
+    slot["freq"] = new Int(obtained.freq);
+}

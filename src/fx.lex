@@ -13,17 +13,21 @@ n [0-9]+
 
 {s}{n}          TOKEN(Int,INT)
 
-"nop"           CMD(nop ,"nop" )
-"halt"          CMD(halt,"halt")
-"repl"          CMD(repl,"repl")
-"?"             CMD(   q,"?"   )
-"."             CMD( dot,"."   )
-"`"             CMD(tick,"`"   )
-"="             CMD(stor,"="   )
-"@"             CMD( get,"@"   )
+"nop"           CMD( nop ,"nop" )
+"halt"          CMD( halt,"halt")
+"repl"          CMD( repl,"repl")
+"?"             CMD(    q,"?"   )
+";"             CMD(clean,";"   )
+"`"             CMD( tick,"`"   )
+"="             CMD( stor,"="   )
+"@"             CMD(  get,"@"   )
+"."             CMD(  dot,"."   )
 
 "gui"           CMD( gui  ,"gui"   )
-"audio"         CMD( audio,"audio" )
+"sound"         CMD( sound,"sound" )
+
+"open"          CMD( open,"open"   )
+"close"         CMD( close,"close" )
 
 [_a-zA-Z][_a-zA-Z0-9]*  TOKEN(Sym,SYM)  // symbol
 

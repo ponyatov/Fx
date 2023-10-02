@@ -1,0 +1,2 @@
+BR2_x86_bonnell=y
+BR2_TARGET_OPTIMIZATION="-mno-movbe"
