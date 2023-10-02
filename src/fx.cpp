@@ -249,13 +249,13 @@ void sound() {
         {
             name = SDL_GetAudioDeviceName(i, false);
             // spec = SDL_GetAudioDeviceSpec(i, false, spec);
-            out->push((new AuDev(name))->r());
+            out->push((new AuPlay(name))->r());
         }
     }
     for (auto i = 0; i < SDL_GetNumAudioDevices(true); i++) {
         {
             name = SDL_GetAudioDeviceName(i, true);
-            in->push((new AuDev(name))->r());
+            in->push((new AuRec(name))->r());
         }
     }
 }
@@ -288,7 +288,10 @@ void IO::close() {}
 void open() { dynamic_cast<IO *>(vm.pop())->open(); }
 void close() { dynamic_cast<IO *>(vm.pop())->close(); }
 
-void AuDev::callback(AuDev *dev, Uint8 *stream, int len) {
+AuPlay::AuPlay(std::string V) : AuDev(V) {}
+AuRec::AuRec(std::string V) : AuDev(V) {}
+
+void AuPlay::callback(AuDev *dev, Uint8 *stream, int len) {
     // std::cerr << std::endl << "callback: " << len << std::endl;
     // assert(dev->samples == len);
     // refill samples buffer
@@ -296,15 +299,12 @@ void AuDev::callback(AuDev *dev, Uint8 *stream, int len) {
     for (auto i = len; i > len / 2; i--) stream[i] = i % 127;
 }
 
-void AuDev::open() {  //
-    SDL_AudioSpec desired, obtained;
-    //
-    SDL_zero(desired);
-    desired.freq = 22050;
-    desired.format = AUDIO_S8;
-    desired.channels = 1;
-    desired.callback = (SDL_AudioCallback)AuDev::callback;
-    desired.userdata = this;
+void AuRec::callback(AuDev *dev, Uint8 *stream, int len) {}
+
+void AuDev::open() {
+    desired.freq = Audio::freq;
+    desired.format = Audio::format;
+    desired.channels = Audio::channels;
     //
     id = SDL_OpenAudioDevice(value.c_str(), 0, &desired, &obtained,
                              SDL_AUDIO_ALLOW_ANY_CHANGE);
@@ -317,7 +317,6 @@ void AuDev::open() {  //
     slot["freq"] = new Int(obtained.freq);
     slot["channels"] = new Int(obtained.channels);
     slot["samples"] = new Int(obtained.samples);
-    assert(obtained.userdata == this);
     //
     slot["signed"] = new Int(!!SDL_AUDIO_ISSIGNED(obtained.format));
     slot["bits"] = new Int(SDL_AUDIO_BITSIZE(obtained.format));
@@ -325,7 +324,24 @@ void AuDev::open() {  //
     assert(!SDL_AUDIO_ISBIGENDIAN(obtained.format));
     //
     assert(iobuf = (int8_t *)malloc(obtained.size));
-    for (auto i = 0; i < samples; i++) iobuf[i] = i % 127;
+}
+
+void AuDev::close() {}
+
+void AuPlay::open() {
+    SDL_zero(desired);
+    desired.callback = (SDL_AudioCallback)AuPlay::callback;
+    desired.userdata = this;
+    AuDev::open();
+    assert(obtained.userdata == this);
+}
+
+void AuRec::open() {
+    SDL_zero(desired);
+    desired.callback = (SDL_AudioCallback)AuRec::callback;
+    desired.userdata = this;
+    AuDev::open();
+    assert(obtained.userdata == this);
 }
 
 AuDev::~AuDev() {

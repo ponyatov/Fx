@@ -267,6 +267,9 @@ struct Win : GUI {
 /// @ingroup audio
 struct Audio : IO {
     Audio(std::string V);
+    static const auto freq = 22050;
+    static const auto format = AUDIO_S8;
+    static const auto channels = 1;
 };
 
 /// @ingroup audio
@@ -275,12 +278,27 @@ struct AuDev : Audio {
     int8_t* iobuf;
     size_t samples = 0;
     SDL_AudioDeviceID id = 0;
+    SDL_AudioSpec desired, obtained;
     ~AuDev();
     AuDev(std::string V);
-    void open();  ///< `SDL_OpenAudioDevice`
+    virtual void open();  ///< `SDL_OpenAudioDevice`
+    virtual void close();
+    virtual void play();
+    virtual void stop();
+};
+
+struct AuPlay : AuDev {
+    AuPlay(std::string V);
+
     static void callback(AuDev* dev, Uint8* stream, int len);
-    void play();
-    void stop();
+    void open();
+    // void close();
+};
+
+struct AuRec : AuDev {
+    AuRec(std::string V);
+    static void callback(AuDev* dev, Uint8* stream, int len);
+    void open();
 };
 
 extern void gui();    ///< `( -- )` start GUI/video
