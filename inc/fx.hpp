@@ -73,6 +73,7 @@ struct Object {
     void clean();          ///< `( ... )` clean @ref nest
     void push(Object* o);  ///< `( -- o )` push to @ref nest
     Object* pop();         ///< `( o -- )` pop from @ref nest
+    Object* top();         ///< `( o -- o )` top (last) item in @ref nest
 
     /// @name slot ops
     Object* get(std::string idx);  ///< get slot by its `.name`
@@ -149,7 +150,12 @@ struct Active : Object {
     Active(std::string V);
 };
 
+/// @defgroup vm vm
+/// @brief FORTH Virtual Machine: execution context & process -- stacks,
+/// vocabulary, queues
 /// @ingroup active
+
+/// @ingroup vm
 struct VM : Active {
     VM(std::string V);
 };
@@ -167,13 +173,14 @@ struct Cmd : Active {
 /// @defgroup skelex skelex
 /// @brief lexical skeleton: syntax parser
 /// @{
-extern int yylex();                    ///< lexer
-extern int yylineno;                   ///< current line
-extern char* yytext;                   ///< lexemet: token value
-extern FILE* yyin;                     ///< current script file
-extern char* yyfile;                   ///< current file name
-extern void yyerror(std::string msg);  ///< syntax error callback
-extern int yyparse();                  ///< syntax parser
+extern int yylex();                             ///< lexer
+extern int yylineno;                            ///< current line
+extern char* yytext;                            ///< lexemet: token value
+extern FILE* yyin;                              ///< current script file
+extern char* yyfile;                            ///< current file name
+extern void yyerror(std::string msg);           ///< syntax error callback
+extern int yyparse();                           ///< syntax parser
+extern void error(std::string msg, Object* o);  ///< raise error
 #include "fx.parser.hpp"
 
 #define TOKEN(C, X)               \
@@ -189,21 +196,39 @@ extern int yyparse();                  ///< syntax parser
     }
 /// @}
 
-/// @defgroup cmd @ref VM commands
+/// @defgroup cmd commands
+/// @ingroup vm
 /// @{
-extern void nop();    ///< `( -- )` empty command
-extern void halt();   ///< `( -- )` stop system
-extern void repl();   ///< `( -- )` start interactive REPL console
-extern void q();      ///< `( -- )` debug dump: @ref vm
-extern void clean();  ///< `( ... -- )` clean @ref vm stack
-extern void tick();   ///< `( -- token )` parse next token into stack
-extern void stor();   ///< `( o name -- )` store o into @ref vm with `name`
-extern void get();    ///< `( name -- o )` get object from @ref vm @ by `name`
-extern void dot();    ///< `( o -- o.element )` get slot by it's `.name`
-extern void error(std::string msg, Object* o);  ///< raise error
 
-extern void open();   ///< `( stream -- )` open stream/device
-extern void close();  ///< `( stream -- )` close stream
+/// @defgroup control control & debug
+/// @{
+extern void nop();   ///< `( -- )` empty command
+extern void halt();  ///< `( -- )` stop system
+extern void repl();  ///< `( -- )` start interactive REPL console
+extern void q();     ///< **?** ` ( -- )` debug dump: @ref vm
+/// @}
+/// @defgroup memory memory
+/// @{
+extern void tick();  ///< `( -- token )` quote: push next token as is
+extern void stor();  ///< `( o name -- )` store o into @ref vm with slot `name`
+extern void get();   ///< `( name -- o )` get @ref vm slot by `name`
+extern void dot();   ///< `( o -- o.element )` get `o` slot by it's `.name`
+/// @}
+
+/// @defgroup stack stack
+/// @{
+extern void dup();    ///< `( a -- a a )` duplicate top element
+extern void drop();   ///< `( a b -- a )` remove top element
+extern void swap();   ///< `( a b -- b a )` swap two top elements
+extern void over();   ///< `( a b -- a b a )` flop over
+extern void clean();  ///< `( ... -- )` clean @ref vm stack
+/// @}
+
+extern void open();    ///< `( stream -- )` open stream/device
+extern void close();   ///< `( stream -- )` close stream
+extern void play();    ///< `( dev -- )`
+extern void _pause();  ///< `( dev -- )`
+extern void stop();    ///< `( dev -- )`
 /// @}
 
 /// @defgroup io io
@@ -244,11 +269,15 @@ struct Audio : IO {
 /// @ingroup audio
 /// @brief audio device
 struct AuDev : Audio {
-    int8_t* samples;
+    int8_t* iobuf;
+    size_t samples = 0;
+    SDL_AudioDeviceID id = 0;
     ~AuDev();
     AuDev(std::string V);
     void open();  ///< `SDL_OpenAudioDevice`
     static void callback(AuDev* dev, Uint8* stream, int len);
+    void play();
+    void stop();
 };
 
 extern void gui();    ///< `( -- )` start GUI/video

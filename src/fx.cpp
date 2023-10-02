@@ -47,6 +47,12 @@ Object *Object::pop() {
     return o;
 }
 
+Object *Object::top() {
+    Object *o = nest.back();
+    assert(o);
+    return o;
+}
+
 void init(int argc, char *argv[]) {  //
     vm.slot["?"] = (new Cmd(q, "?"))->r();
     vm.slot["argc"] = (new Int(argc))->r();
@@ -274,7 +280,7 @@ Win::Win(std::string V) : GUI(V) {
 }
 
 Audio::Audio(std::string V) : IO(V) {}
-AuDev::AuDev(std::string V) : Audio(V) {}
+AuDev::AuDev(std::string V) : Audio(V) { iobuf = nullptr; }
 
 void IO::open() {}
 void IO::close() {}
@@ -283,21 +289,25 @@ void open() { dynamic_cast<IO *>(vm.pop())->open(); }
 void close() { dynamic_cast<IO *>(vm.pop())->close(); }
 
 void AuDev::callback(AuDev *dev, Uint8 *stream, int len) {
-    std::cerr << std::endl << callback << std::endl;
+    // std::cerr << std::endl << "callback: " << len << std::endl;
+    // assert(dev->samples == len);
+    // refill samples buffer
+    for (auto i = 0; i < len / 2; i++) stream[i] = i % (127 / 2);
+    for (auto i = len; i > len / 2; i--) stream[i] = i % 127;
 }
 
 void AuDev::open() {  //
     SDL_AudioSpec desired, obtained;
     //
-    SDL_memset(&desired, 0, sizeof(desired));
+    SDL_zero(desired);
     desired.freq = 22050;
     desired.format = AUDIO_S8;
     desired.channels = 1;
     desired.callback = (SDL_AudioCallback)AuDev::callback;
     desired.userdata = this;
     //
-    SDL_AudioDeviceID id =
-        SDL_OpenAudioDevice(value.c_str(), 0, &desired, &obtained, 0);
+    id = SDL_OpenAudioDevice(value.c_str(), 0, &desired, &obtained,
+                             SDL_AUDIO_ALLOW_ANY_CHANGE);
     if (!id) {
         std::cerr << SDL_GetError() << std::endl;
         abort();
@@ -307,13 +317,46 @@ void AuDev::open() {  //
     slot["freq"] = new Int(obtained.freq);
     slot["channels"] = new Int(obtained.channels);
     slot["samples"] = new Int(obtained.samples);
-    assert(samples = (int8_t *)malloc(obtained.size));
     assert(obtained.userdata == this);
     //
     slot["signed"] = new Int(!!SDL_AUDIO_ISSIGNED(obtained.format));
     slot["bits"] = new Int(SDL_AUDIO_BITSIZE(obtained.format));
     assert(!SDL_AUDIO_ISFLOAT(obtained.format));
     assert(!SDL_AUDIO_ISBIGENDIAN(obtained.format));
+    //
+    assert(iobuf = (int8_t *)malloc(obtained.size));
+    for (auto i = 0; i < samples; i++) iobuf[i] = i % 127;
 }
 
-AuDev::~AuDev() { free(samples); }
+AuDev::~AuDev() {
+    if (iobuf) free(iobuf);
+}
+
+void dup() { vm.push(vm.top()); }
+
+void drop() { vm.pop(); }
+
+void swap() {
+    Object *a = vm.pop();
+    Object *b = vm.pop();
+    vm.push(a);
+    vm.push(b);
+}
+
+void over() { abort(); }
+
+void play() { dynamic_cast<AuDev *>(vm.pop())->play(); }
+
+void AuDev::play() {
+    assert(id);
+    SDL_PauseAudioDevice(id, false);
+}
+
+void AuDev::stop() {
+    assert(id);
+    SDL_PauseAudioDevice(id, true);
+}
+
+void _pause() {}
+
+void stop() {}

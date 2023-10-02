@@ -14,4 +14,4 @@ EXTENSION_MAPPING      = lex=C++ yacc=C++ ino=C++
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = YES
 LAYOUT_FILE            = doc/DoxygenLayout.xml
-SORT_GROUP_NAMES       = YES
+SORT_GROUP_NAMES       = NO
