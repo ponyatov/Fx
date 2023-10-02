@@ -244,8 +244,11 @@ struct Audio : IO {
 /// @ingroup audio
 /// @brief audio device
 struct AuDev : Audio {
+    int8_t* samples;
+    ~AuDev();
     AuDev(std::string V);
     void open();  ///< `SDL_OpenAudioDevice`
+    static void callback(AuDev* dev, Uint8* stream, int len);
 };
 
 extern void gui();    ///< `( -- )` start GUI/video

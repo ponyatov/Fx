@@ -44,7 +44,7 @@ async function activate(context) {
         clientOptions
       );
       log.appendLine(['client',client]);
-      client.start();
+    //   client.start();
 }
 
 function deactivate() {
