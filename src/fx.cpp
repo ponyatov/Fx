@@ -297,10 +297,10 @@ void AuPlay::callback(AuDev *dev, Uint8 *stream, int len) {
     // refill samples buffer
     // for (auto i = 0; i < len / 2; i++) stream[i] = i % (127 / 2);
     // for (auto i = len; i > len / 2; i--) stream[i] = i % 127;
-    
 }
 
-void AuRec::callback(AuDev *dev, Uint8 *stream, int len) {}
+void AuRec::callback(AuDev *dev, Uint8 *stream, int len) {  //
+}
 
 void AuDev::open() {
     desired.freq = Audio::freq;
