@@ -180,7 +180,10 @@ rootfs:
 	$(MAKE) fw
 
 .PHONY: fw
-fw: fw/bios/bzImage fw/bios/rootfs.cpio
+fw: fw/bios/bzImage fw/bios/rootfs.cpio \
+	fw/efi64/bzImage fw/efi64/rootfs.cpio
 
 fw/bios/%: $(BR)/output/images/%
+	cp $< $@
+fw/efi64/%: $(BR)/output/images/%
 	cp $< $@

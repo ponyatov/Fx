@@ -275,6 +275,7 @@ struct Audio : IO {
 /// @ingroup audio
 /// @brief audio device
 struct AuDev : Audio {
+    static int8_t* echo;
     int8_t* iobuf;
     size_t samples = 0;
     SDL_AudioDeviceID id = 0;

@@ -295,8 +295,9 @@ void AuPlay::callback(AuDev *dev, Uint8 *stream, int len) {
     // std::cerr << std::endl << "callback: " << len << std::endl;
     // assert(dev->samples == len);
     // refill samples buffer
-    for (auto i = 0; i < len / 2; i++) stream[i] = i % (127 / 2);
-    for (auto i = len; i > len / 2; i--) stream[i] = i % 127;
+    // for (auto i = 0; i < len / 2; i++) stream[i] = i % (127 / 2);
+    // for (auto i = len; i > len / 2; i--) stream[i] = i % 127;
+    
 }
 
 void AuRec::callback(AuDev *dev, Uint8 *stream, int len) {}
@@ -324,9 +325,18 @@ void AuDev::open() {
     assert(!SDL_AUDIO_ISBIGENDIAN(obtained.format));
     //
     assert(iobuf = (int8_t *)malloc(obtained.size));
+    if (!AuDev::echo)  //
+        assert(AuDev::echo = (int8_t *)malloc(obtained.size));
 }
 
-void AuDev::close() {}
+int8_t *AuDev::echo = nullptr;
+
+void AuDev::close() {
+    if (AuDev::echo) {
+        free(AuDev::echo);
+        AuDev::echo = nullptr;
+    }
+}
 
 void AuPlay::open() {
     SDL_zero(desired);
