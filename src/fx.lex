@@ -23,8 +23,16 @@ n [0-9]+
 "@"             CMD(  get,"@"   )
 "."             CMD(  dot,"."   )
 
-"gui"           CMD( gui  ,"gui"   )
-"sound"         CMD( sound,"sound" )
+"dup"           CMD(  dup,"dup"  )
+"drop"          CMD( drop,"drop" )
+"swap"          CMD( swap,"swap" )
+"over"          CMD( over,"over" )
+
+"gui"           CMD(    gui,"gui"   )
+"sound"         CMD(  sound,"sound" )
+"play"          CMD(   play,"play"  )
+"pause"         CMD( _pause,"pause" )
+"stop"          CMD(   stop,"stop"  )
 
 "open"          CMD( open,"open"   )
 "close"         CMD( close,"close" )

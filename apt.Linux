@@ -4,3 +4,4 @@ code meld clang-format
 g++ gdb cmake
 flex bison libreadline-dev
 isc-dhcp-server isc-dhcp-client tftpd-hpa tftp pxelinux syslinux nfs-kernel-server
+libelf-dev

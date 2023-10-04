@@ -5,7 +5,7 @@ CORES  ?= $(shell grep processor /proc/cpuinfo | wc -l)
 
 # fw
 APP ?= $(MODULE)
-HW  ?= qemu64
+HW  ?= qemu686
 
 include hw/$(HW).mk
 include cpu/$(CPU).mk
@@ -120,7 +120,7 @@ QEMU_APPEND += -vga=0x315
 .PHONY: qemu
 qemu: fw
 	$(QEMU) $(QEMU_CFG) \
-		-kernel fw/bzImage -initrd fw/rootfs.cpio \
+		-kernel fw/bios/bzImage -initrd fw/bios/rootfs.cpio \
 		-append $(QEMU_APPEND)
 
 $(BR)/README.md: $(GZ)/$(BR_GZ)
@@ -180,7 +180,10 @@ rootfs:
 	$(MAKE) fw
 
 .PHONY: fw
-fw: fw/bios/bzImage fw/bios/rootfs.cpio
+fw: fw/bios/bzImage fw/bios/rootfs.cpio \
+	fw/efi64/bzImage fw/efi64/rootfs.cpio
 
 fw/bios/%: $(BR)/output/images/%
+	cp $< $@
+fw/efi64/%: $(BR)/output/images/%
 	cp $< $@
