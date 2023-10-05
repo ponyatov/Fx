@@ -22,6 +22,7 @@
         "*.kernel": "makefile",
         "etc/**": "shellscript",
         "root/etc/**": "shellscript",
+        "ostream": "cpp"
     },
 
     // editor
@@ -60,8 +61,15 @@
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [ "-DAPP=${workspaceFolderBasename}" ],
     "cmake.debugConfig": {
-	    "cwd": "${workspaceFolder}",
-        "args": ["${workspaceFolder}/lib/${workspaceFolderBasename}.ini"]
+        // "all": {
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "${workspaceFolder}/lib/${workspaceFolderBasename}.ini"
+            ],
+            "env": {
+                "SDL_AUDIODRIVER": "salsa"
+            }
+        // }
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "cmake.generator": "Unix Makefiles"

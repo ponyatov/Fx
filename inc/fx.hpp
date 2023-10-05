@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include <limits.h>
 
 #include <cxxabi.h>
 
@@ -158,6 +159,7 @@ struct Active : Object {
 /// @ingroup vm
 struct VM : Active {
     VM(std::string V);
+    void delay(size_t ms);
 };
 
 /// @ingroup active
@@ -202,10 +204,11 @@ extern void error(std::string msg, Object* o);  ///< raise error
 
 /// @defgroup control control & debug
 /// @{
-extern void nop();   ///< `( -- )` empty command
-extern void halt();  ///< `( -- )` stop system
-extern void repl();  ///< `( -- )` start interactive REPL console
-extern void q();     ///< **?** ` ( -- )` debug dump: @ref vm
+extern void nop();    ///< `( -- )` empty command
+extern void halt();   ///< `( -- )` stop system
+extern void repl();   ///< `( -- )` start interactive REPL console
+extern void q();      ///< **?** ` ( -- )` debug dump: @ref vm
+extern void delay();  ///< `( ms -- )` thread delay
 /// @}
 /// @defgroup memory memory
 /// @{
@@ -228,7 +231,8 @@ extern void clean();  ///< `( ... -- )` clean @ref vm stack
 /// @{
 extern void open();    ///< `( stream -- )` open stream/device
 extern void close();   ///< `( stream -- )` close stream
-extern void play();    ///< `( dev -- )`
+extern void play();    ///< `( dev -- )` start @ref AuPlay or error
+extern void record();  ///< `( dev -- )` start @ref AuRec or error
 extern void _pause();  ///< `( dev -- )`
 extern void stop();    ///< `( dev -- )`
 /// @}
@@ -275,8 +279,9 @@ struct Audio : IO {
 /// @ingroup audio
 /// @brief audio device
 struct AuDev : Audio {
-    static int8_t* echo;
-    int8_t* iobuf;
+    static int8_t echo[USHRT_MAX];
+    static uint16_t echo_r, echo_w;
+    // int8_t* iobuf;
     size_t samples = 0;
     SDL_AudioDeviceID id = 0;
     SDL_AudioSpec desired, obtained;
@@ -285,6 +290,7 @@ struct AuDev : Audio {
     virtual void open();  ///< `SDL_OpenAudioDevice`
     virtual void close();
     virtual void play();
+    virtual void record();
     virtual void stop();
 };
 
@@ -294,12 +300,16 @@ struct AuPlay : AuDev {
     static void callback(AuDev* dev, Uint8* stream, int len);
     void open();
     // void close();
+    void play();
+    void record();
 };
 
 struct AuRec : AuDev {
     AuRec(std::string V);
     static void callback(AuDev* dev, Uint8* stream, int len);
     void open();
+    void play();
+    void record();
 };
 
 extern void gui();    ///< `( -- )` start GUI/video

@@ -243,18 +243,21 @@ void sound() {
     Vector *out = new Vector("out");
     a->slot["out"] = out->r();
     //
-    // SDL_AudioSpec *spec = nullptr;
     std::string name;
-    for (auto i = 0; i < SDL_GetNumAudioDevices(false); i++) {
+    int play_devices_num = SDL_GetNumAudioDevices(true);
+    assert(play_devices_num > 0);
+    for (auto i = 0; i < play_devices_num; i++) {
         {
             name = SDL_GetAudioDeviceName(i, false);
-            // spec = SDL_GetAudioDeviceSpec(i, false, spec);
             out->push((new AuPlay(name))->r());
         }
     }
-    for (auto i = 0; i < SDL_GetNumAudioDevices(true); i++) {
+    int record_devices_num = SDL_GetNumAudioDevices(true);
+    assert(record_devices_num > 0);
+    for (auto i = 0; i < record_devices_num; i++) {
         {
             name = SDL_GetAudioDeviceName(i, true);
+            std::cerr << "rec:" << name << std::endl;
             in->push((new AuRec(name))->r());
         }
     }
@@ -280,7 +283,7 @@ Win::Win(std::string V) : GUI(V) {
 }
 
 Audio::Audio(std::string V) : IO(V) {}
-AuDev::AuDev(std::string V) : Audio(V) { iobuf = nullptr; }
+AuDev::AuDev(std::string V) : Audio(V) {}  // iobuf = nullptr; }
 
 void IO::open() {}
 void IO::close() {}
@@ -291,15 +294,30 @@ void close() { dynamic_cast<IO *>(vm.pop())->close(); }
 AuPlay::AuPlay(std::string V) : AuDev(V) {}
 AuRec::AuRec(std::string V) : AuDev(V) {}
 
+int8_t AuDev::echo[USHRT_MAX];
+uint16_t AuDev::echo_r = 0, AuDev::echo_w = 0;
+
 void AuPlay::callback(AuDev *dev, Uint8 *stream, int len) {
     // std::cerr << std::endl << "callback: " << len << std::endl;
     // assert(dev->samples == len);
     // refill samples buffer
     // for (auto i = 0; i < len / 2; i++) stream[i] = i % (127 / 2);
     // for (auto i = len; i > len / 2; i--) stream[i] = i % 127;
+    // SDL_memcpy(stream, AuDev::echo, len);
+    for (int i = 0; i < len; i++)  //
+        stream[i] = echo[echo_r++];
 }
 
-void AuRec::callback(AuDev *dev, Uint8 *stream, int len) {  //
+void AuRec::callback(AuDev *dev, Uint8 *stream, int len) {
+    // SDL_memcpy(AuDev::echo, stream, len);
+    // assert(stream);
+    for (int i = 0; i < len; i++)  //
+    {
+        int8_t r = (reinterpret_cast<int8_t *>(stream))[i];
+        echo[echo_w++] = r;
+        int ir = int(r);
+        if (ir != -128) std::cerr << ir << '\t';
+    }
 }
 
 void AuDev::open() {
@@ -309,8 +327,8 @@ void AuDev::open() {
     //
     id = SDL_OpenAudioDevice(value.c_str(), 0, &desired, &obtained,
                              SDL_AUDIO_ALLOW_ANY_CHANGE);
-    if (!id) {
-        std::cerr << SDL_GetError() << std::endl;
+    if (id <= 0) {  // in case of buggy GetDeviceName @ i7 try default device
+        std::cerr << SDL_GetError() << this->head(" ") << std::endl;
         abort();
     }
     //
@@ -324,19 +342,12 @@ void AuDev::open() {
     assert(!SDL_AUDIO_ISFLOAT(obtained.format));
     assert(!SDL_AUDIO_ISBIGENDIAN(obtained.format));
     //
-    assert(iobuf = (int8_t *)malloc(obtained.size));
-    if (!AuDev::echo)  //
-        assert(AuDev::echo = (int8_t *)malloc(obtained.size));
+    // assert(iobuf = (int8_t *)malloc(obtained.size));
 }
 
-int8_t *AuDev::echo = nullptr;
+int8_t echo[sizeof(uint16_t)];
 
-void AuDev::close() {
-    if (AuDev::echo) {
-        free(AuDev::echo);
-        AuDev::echo = nullptr;
-    }
-}
+void AuDev::close() {}
 
 void AuPlay::open() {
     SDL_zero(desired);
@@ -355,7 +366,7 @@ void AuRec::open() {
 }
 
 AuDev::~AuDev() {
-    if (iobuf) free(iobuf);
+    // if (iobuf) free(iobuf);
 }
 
 void dup() { vm.push(vm.top()); }
@@ -372,11 +383,22 @@ void swap() {
 void over() { abort(); }
 
 void play() { dynamic_cast<AuDev *>(vm.pop())->play(); }
+void record() { dynamic_cast<AuDev *>(vm.pop())->record(); }
 void stop() { dynamic_cast<AuDev *>(vm.pop())->stop(); }
 
 void _pause() { stop(); }
 
-void AuDev::play() {
+void AuDev::play() { abort(); }
+void AuDev::record() { abort(); }
+void AuRec::play() { abort(); }
+void AuPlay::record() { abort(); }
+
+void AuPlay::play() {
+    assert(id);
+    SDL_PauseAudioDevice(id, false);
+}
+
+void AuRec::record() {
     assert(id);
     SDL_PauseAudioDevice(id, false);
 }
@@ -385,3 +407,10 @@ void AuDev::stop() {
     assert(id);
     SDL_PauseAudioDevice(id, true);
 }
+
+void delay() {
+    size_t ms = (dynamic_cast<Int *>(vm.pop()))->value;
+    vm.delay(ms);
+}
+
+void VM::delay(size_t ms) { usleep(ms); }

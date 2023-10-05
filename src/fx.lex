@@ -13,15 +13,16 @@ n [0-9]+
 
 {s}{n}          TOKEN(Int,INT)
 
-"nop"           CMD( nop ,"nop" )
-"halt"          CMD( halt,"halt")
-"repl"          CMD( repl,"repl")
-"?"             CMD(    q,"?"   )
-";"             CMD(clean,";"   )
-"`"             CMD( tick,"`"   )
-"="             CMD( stor,"="   )
-"@"             CMD(  get,"@"   )
-"."             CMD(  dot,"."   )
+"nop"           CMD( nop ,"nop"  )
+"halt"          CMD( halt,"halt" )
+"repl"          CMD( repl,"repl" )
+"?"             CMD(    q,"?"    )
+";"             CMD(clean,";"    )
+"`"             CMD( tick,"`"    )
+"="             CMD( stor,"="    )
+"@"             CMD(  get,"@"    )
+"."             CMD(  dot,"."    )
+"delay"         CMD(delay,"delay")
 
 "dup"           CMD(  dup,"dup"  )
 "drop"          CMD( drop,"drop" )
@@ -31,6 +32,7 @@ n [0-9]+
 "gui"           CMD(    gui,"gui"   )
 "sound"         CMD(  sound,"sound" )
 "play"          CMD(   play,"play"  )
+"record"        CMD( record,"record")
 "pause"         CMD( _pause,"pause" )
 "stop"          CMD(   stop,"stop"  )
 
